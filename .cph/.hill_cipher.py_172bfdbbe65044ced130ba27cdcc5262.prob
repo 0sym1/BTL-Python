@@ -1,0 +1,1 @@
+{"name":"Local: hill_cipher","url":"e:\\Em iu PTIT\\Bai Tap PTIT\\Python\\BTL\\hill_cipher.py","tests":[{"id":1740982744792,"input":"helloword\n2 3 1 4","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\Em iu PTIT\\Bai Tap PTIT\\Python\\BTL\\hill_cipher.py","group":"local","local":true}

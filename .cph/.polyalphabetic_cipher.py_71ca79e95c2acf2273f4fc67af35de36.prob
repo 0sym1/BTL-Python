@@ -1,0 +1,1 @@
+{"name":"Local: polyalphabetic_cipher","url":"e:\\Em iu PTIT\\Bai Tap PTIT\\Python\\BTL\\polyalphabetic_cipher.py","tests":[{"id":1740980647304,"input":"rijvs\nkey","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\Em iu PTIT\\Bai Tap PTIT\\Python\\BTL\\polyalphabetic_cipher.py","group":"local","local":true}

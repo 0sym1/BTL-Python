@@ -2,13 +2,27 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtCore import pyqtSignal
 import CheckPassScene
+import TwoFactorAuth
+
 ############################################
 ui = ''
 app = QApplication(sys.argv)
 window = ''
 
-password = '123'
-otp = '123'
+
+############################################
+
+password = ''
+otp = ''
+email = ''
+
+with open("Data/data_account_manager", "r", encoding="utf-8") as files:
+    lines = files.readlines()
+    print(lines)
+    password = lines[0].strip().split(":")[1].strip()
+    email = lines[1].strip().split(":")[1].strip()
+
+
 
 ############################################
 
@@ -39,6 +53,13 @@ class CheckPassController(CheckPassScene.Ui_MainWindow):
             self.label.setText('OTP has been sent to your email')
             self.lineEdit.setText('')
             self.authentication_step = 2
+
+            global otp
+            otp = TwoFactorAuth.generate_otp()
+            # TwoFactorAuth.send_otp(email, otp)
+            otp = "123"
+            
+
         else:
             self.label.setText('Incorrect Password')
 

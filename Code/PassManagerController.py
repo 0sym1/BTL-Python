@@ -2,6 +2,8 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 import PassManagerScene
 from EditAccountsController import EditAccountsController
+from ChangePasswordController import ChangePasswordController
+from ChangeEmailController import ChangeEmailController
 
 ############################################
 ui = ''
@@ -24,6 +26,8 @@ class PassManagerController(PassManagerScene.Ui_MainWindow):
     def listener(self):
         self.Back_Button.clicked.connect(self.on_back_button_click)
         self.AddAcount_Button.clicked.connect(self.on_edit_accounts_button_click)
+        self.ChangePass_Button.clicked.connect(self.on_change_password_button_click)
+        self.ChangeMail_Button.clicked.connect(self.on_change_email_button_click)
 
 
     def on_back_button_click(self):
@@ -36,6 +40,19 @@ class PassManagerController(PassManagerScene.Ui_MainWindow):
         self.hide()
 
         self.window2.update_data_account.connect(self.load_data_account)
+
+    def on_change_password_button_click(self):
+        self.window2 = ChangePasswordController(self)
+        self.window2.show()
+        self.hide()
+
+    def on_change_email_button_click(self):
+        self.window2 = ChangeEmailController(self)
+        self.window2.show()
+        self.hide()
+
+    # def on_change_email_button_click(self):
+    #     self.window2 = ChangeEmailController(self)
 
     # def load_data_account(self):
     #     count_line = 0

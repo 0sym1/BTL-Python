@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QL
 from Cryptodome.Cipher import AES, DES3, Blowfish
 from Cryptodome.Random import get_random_bytes
 import base64
+
 class EncryptionApp(QWidget):
     def __init__(self):
         super().__init__()
@@ -220,3 +221,11 @@ class EncryptionApp(QWidget):
 
         except Exception as e:
             self.result.setText(f"Lỗi giải mã file: {str(e)}")
+
+
+
+if __name__ == "__main__":
+    app = QApplication([])
+    window = EncryptionApp()
+    window.show()
+    app.exec()

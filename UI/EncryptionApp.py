@@ -1,8 +1,6 @@
-from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QLabel,
-                             QFileDialog, QComboBox, QLineEdit, QTextEdit)
-from Cryptodome.Cipher import AES, DES3, Blowfish
-from Cryptodome.Random import get_random_bytes
-import base64
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QFileDialog, QComboBox, QLineEdit, QTextEdit
+from Code.Encrypt import Encrypt
+from Code.Decrypt import Decrypt
 
 
 class EncryptionApp(QWidget):
@@ -12,6 +10,8 @@ class EncryptionApp(QWidget):
 
     def initUI(self):
         layout = QVBoxLayout()
+        self.encryptor = Encrypt()
+        self.decryptor = Decrypt()
 
         self.label = QLabel("Chọn thuật toán:")
         layout.addWidget(self.label)
@@ -52,173 +52,51 @@ class EncryptionApp(QWidget):
         self.setWindowTitle("Ứng dụng Mã hóa")
         self.resize(800, 600)
 
-    def generate_key(self, algo):
-        if algo == "AES":
-            return get_random_bytes(32)
-        elif algo == "3DES":
-            return get_random_bytes(24)
-        elif algo == "Blowfish":
-            return get_random_bytes(16)
-
     def encrypt_text(self):
-        """Mã hóa văn bản"""
-        text = self.text_input.toPlainText()
-        if not text:
-            self.result.setText("Vui lòng nhập văn bản để mã hóa.")
-            return
-
         algo = self.combo.currentText()
+        text = self.text_input.toPlainText()
         key = self.key_input.text().strip()
 
-        if not key:
-            key = self.generate_key(algo)
-            self.key_input.setText(base64.b64encode(key).decode())
+        encrypted_data, new_key = self.encryptor.encrypt_text(text, algo, key)
+        if encrypted_data:
+            self.result.setText(f"Mã hóa thành công:\n{encrypted_data}")
+            self.key_input.setText(new_key)
         else:
-            try:
-                key = base64.b64decode(key)
-            except:
-                self.result.setText("Khóa không hợp lệ.")
-                return
-
-        if algo == "AES":
-            cipher = AES.new(key, AES.MODE_EAX)
-        elif algo == "3DES":
-            cipher = DES3.new(key, DES3.MODE_EAX)
-        elif algo == "Blowfish":
-            cipher = Blowfish.new(key, Blowfish.MODE_EAX)
-
-        ciphertext, tag = cipher.encrypt_and_digest(text.encode())
-        encrypted_data = base64.b64encode(cipher.nonce + tag + ciphertext).decode()
-
-        self.result.setText(f"Mã hóa thành công:\n{encrypted_data}")
+            self.result.setText(new_key)
 
     def decrypt_text(self):
-        """Giải mã văn bản"""
-        encrypted_data = self.text_input.toPlainText().strip()
-        if not encrypted_data:
-            self.result.setText("Vui lòng nhập văn bản đã mã hóa.")
-            return
-
         algo = self.combo.currentText()
+        encrypted_data = self.text_input.toPlainText()
         key = self.key_input.text().strip()
 
-        if not key:
-            self.result.setText("Vui lòng nhập khóa giải mã.")
-            return
-
-        try:
-            key = base64.b64decode(key)
-        except:
-            self.result.setText("Khóa không hợp lệ.")
-            return
-
-        try:
-            encrypted_data = base64.b64decode(encrypted_data)
-            nonce, tag, ciphertext = encrypted_data[:16], encrypted_data[16:32], encrypted_data[32:]
-
-            if algo == "AES":
-                cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
-            elif algo == "3DES":
-                cipher = DES3.new(key, DES3.MODE_EAX, nonce=nonce)
-            elif algo == "Blowfish":
-                cipher = Blowfish.new(key, Blowfish.MODE_EAX, nonce=nonce)
-
-            decrypted_data = cipher.decrypt_and_verify(ciphertext, tag)
-            self.result.setText(f"Giải mã thành công:\n{decrypted_data.decode()}")
-
-        except Exception as e:
-            self.result.setText(f"Lỗi giải mã: {str(e)}")
+        decrypted_data, error = self.decryptor.decrypt_text(encrypted_data, algo, key)
+        self.result.setText(decrypted_data if decrypted_data else error)
 
     def encrypt_file(self):
-        """Mã hóa file và cho phép chọn nơi lưu"""
+        algo = self.combo.currentText()
+        key = self.key_input.text().strip()
         file_path, _ = QFileDialog.getOpenFileName(self, "Chọn file để mã hóa")
+
         if not file_path:
             return
 
-        algo = self.combo.currentText()
-        key = self.key_input.text().strip()
-
-        if not key:
-            key = self.generate_key(algo)
-            self.key_input.setText(base64.b64encode(key).decode())
+        result, new_key = self.encryptor.encrypt_file(file_path, algo, key)
+        if result:
+            self.result.setText(f"Mã hóa file thành công: {result}")
+            self.key_input.setText(new_key)
         else:
-            try:
-                key = base64.b64decode(key)
-            except:
-                self.result.setText("Khóa không hợp lệ.")
-                return
-
-        with open(file_path, "rb") as f:
-            plaintext = f.read()
-
-        if algo == "AES":
-            cipher = AES.new(key, AES.MODE_EAX)
-        elif algo == "3DES":
-            cipher = DES3.new(key, DES3.MODE_EAX)
-        elif algo == "Blowfish":
-            cipher = Blowfish.new(key, Blowfish.MODE_EAX)
-
-        ciphertext, tag = cipher.encrypt_and_digest(plaintext)
-
-        # Chọn nơi lưu file đã mã hóa
-        save_path, _ = QFileDialog.getSaveFileName(self, "Lưu file đã mã hóa", file_path + ".enc", "All Files (*)")
-        if not save_path:  # Nếu người dùng bấm Hủy
-            self.result.setText("Hủy lưu file.")
-            return
-
-        with open(save_path, "wb") as f:
-            f.write(cipher.nonce + tag + ciphertext)
-
-        self.result.setText(f"Mã hóa file thành công: {save_path}")
+            self.result.setText(new_key)
 
     def decrypt_file(self):
-        """Giải mã file và cho phép chọn nơi lưu"""
+        algo = self.combo.currentText()
+        key = self.key_input.text().strip()
         file_path, _ = QFileDialog.getOpenFileName(self, "Chọn file để giải mã")
+
         if not file_path:
             return
 
-        if not file_path.endswith(".enc"):
-            self.result.setText("File không hợp lệ! Vui lòng chọn file có đuôi .enc.")
-            return
-
-        algo = self.combo.currentText()
-        key = self.key_input.text().strip()
-
-        if not key:
-            self.result.setText("Vui lòng nhập khóa giải mã.")
-            return
-
-        try:
-            key = base64.b64decode(key)
-        except:
-            self.result.setText("Khóa không hợp lệ.")
-            return
-
-        try:
-            with open(file_path, "rb") as f:
-                encrypted_data = f.read()
-
-            nonce, tag, ciphertext = encrypted_data[:16], encrypted_data[16:32], encrypted_data[32:]
-
-            if algo == "AES":
-                cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
-            elif algo == "3DES":
-                cipher = DES3.new(key, DES3.MODE_EAX, nonce=nonce)
-            elif algo == "Blowfish":
-                cipher = Blowfish.new(key, Blowfish.MODE_EAX, nonce=nonce)
-
-            decrypted_data = cipher.decrypt_and_verify(ciphertext, tag)
-
-            # Chọn nơi lưu file sau khi giải mã
-            save_path, _ = QFileDialog.getSaveFileName(self, "Lưu file giải mã", file_path[:-4], "All Files (*)")
-            if not save_path:  # Nếu người dùng bấm Hủy
-                self.result.setText("Hủy lưu file.")
-                return
-
-            with open(save_path, "wb") as f:
-                f.write(decrypted_data)
-
-            self.result.setText(f"Giải mã file thành công: {save_path}")
-
-        except Exception as e:
-            self.result.setText(f"Lỗi giải mã file: {str(e)}")
+        result, error = self.decryptor.decrypt_file(file_path, algo, key)
+        if result:
+            self.result.setText(f"Giải mã file thành công: {result}")
+        else:
+            self.result.setText(error)

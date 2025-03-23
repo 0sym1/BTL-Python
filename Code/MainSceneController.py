@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow
 import MainScene, CheckPassScene, PassManagerScene
 from CheckPassController import CheckPassController
 from PassManagerController import PassManagerController
+from EncryptionApp import EncryptionApp
 ############################################
 ui = ''
 app = QApplication(sys.argv)
@@ -47,7 +48,9 @@ class MyApp(QMainWindow, MainScene.Ui_MainWindow):
 
 
     def on_Encrypt_button_click(self):
-        self.label.setText(self.lineEdit.text())
+        self.window2 = EncryptionApp()
+        window.hide()
+        self.window2.show()
 
     def on_SecureFile_button_click(self):
         self.label.setText(self.lineEdit.text())

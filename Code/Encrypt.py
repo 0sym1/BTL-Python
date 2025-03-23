@@ -1,72 +1,47 @@
-import base64
 from Cryptodome.Cipher import AES, DES3, Blowfish
 from Cryptodome.Random import get_random_bytes
-from PyQt6.QtWidgets import QFileDialog
+import base64
 
 
-class Encrypt:
-    def generate_key(self, algo):
-        if algo == "AES":
+class Encryptor:
+    def __init__(self, algo, key=None):
+        self.algo = algo
+        self.key = key or self.generate_key()
+
+    def generate_key(self):
+        """Tạo khóa ngẫu nhiên theo thuật toán đã chọn"""
+        if self.algo == "AES":
             return get_random_bytes(32)
-        elif algo == "3DES":
+        elif self.algo == "3DES":
             return get_random_bytes(24)
-        elif algo == "Blowfish":
+        elif self.algo == "Blowfish":
             return get_random_bytes(16)
 
-    def encrypt_text(self, text, algo, key):
-        if not text:
-            return None, "Vui lòng nhập văn bản để mã hóa."
-
-        if not key:
-            key = self.generate_key(algo)
-            new_key = base64.b64encode(key).decode()
-        else:
-            try:
-                key = base64.b64decode(key)
-                new_key = key
-            except:
-                return None, "Khóa không hợp lệ."
-
-        if algo == "AES":
-            cipher = AES.new(key, AES.MODE_EAX)
-        elif algo == "3DES":
-            cipher = DES3.new(key, DES3.MODE_EAX)
-        elif algo == "Blowfish":
-            cipher = Blowfish.new(key, Blowfish.MODE_EAX)
+    def encrypt_text(self, text):
+        """Mã hóa văn bản"""
+        if self.algo == "AES":
+            cipher = AES.new(self.key, AES.MODE_EAX)
+        elif self.algo == "3DES":
+            cipher = DES3.new(self.key, DES3.MODE_EAX)
+        elif self.algo == "Blowfish":
+            cipher = Blowfish.new(self.key, Blowfish.MODE_EAX)
 
         ciphertext, tag = cipher.encrypt_and_digest(text.encode())
-        encrypted_data = base64.b64encode(cipher.nonce + tag + ciphertext).decode()
+        return base64.b64encode(cipher.nonce + tag + ciphertext).decode()
 
-        return encrypted_data, new_key
-
-    def encrypt_file(self, file_path, algo, key):
-        if not key:
-            key = self.generate_key(algo)
-            new_key = base64.b64encode(key).decode()
-        else:
-            try:
-                key = base64.b64decode(key)
-                new_key = key
-            except:
-                return None, "Khóa không hợp lệ."
-
+    def encrypt_file(self, file_path, save_path):
+        """Mã hóa file"""
         with open(file_path, "rb") as f:
             plaintext = f.read()
 
-        if algo == "AES":
-            cipher = AES.new(key, AES.MODE_EAX)
-        elif algo == "3DES":
-            cipher = DES3.new(key, DES3.MODE_EAX)
-        elif algo == "Blowfish":
-            cipher = Blowfish.new(key, Blowfish.MODE_EAX)
+        if self.algo == "AES":
+            cipher = AES.new(self.key, AES.MODE_EAX)
+        elif self.algo == "3DES":
+            cipher = DES3.new(self.key, DES3.MODE_EAX)
+        elif self.algo == "Blowfish":
+            cipher = Blowfish.new(self.key, Blowfish.MODE_EAX)
 
         ciphertext, tag = cipher.encrypt_and_digest(plaintext)
 
-        save_path, _ = QFileDialog.getSaveFileName(None, "Lưu file đã mã hóa", file_path + ".enc", "All Files (*)")
-        if not save_path:
-            return None, "Hủy lưu file."
-
         with open(save_path, "wb") as f:
             f.write(cipher.nonce + tag + ciphertext)
-
-        return save_path, new_key

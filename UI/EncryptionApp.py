@@ -1,7 +1,8 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QFileDialog, QComboBox, QLineEdit, QTextEdit
-from Code.Encrypt import Encrypt
-from Code.Decrypt import Decrypt
-
+from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QLabel,
+                             QFileDialog, QComboBox, QLineEdit, QTextEdit)
+import base64
+from Code.Encrypt import Encryptor
+from Code.Decrypt import Decryptor
 
 class EncryptionApp(QWidget):
     def __init__(self):
@@ -10,8 +11,6 @@ class EncryptionApp(QWidget):
 
     def initUI(self):
         layout = QVBoxLayout()
-        self.encryptor = Encrypt()
-        self.decryptor = Decrypt()
 
         self.label = QLabel("Chọn thuật toán:")
         layout.addWidget(self.label)
@@ -21,18 +20,18 @@ class EncryptionApp(QWidget):
         layout.addWidget(self.combo)
 
         self.key_input = QLineEdit()
-        self.key_input.setPlaceholderText("Nhập khóa (để trống để tự sinh khóa)")
+        self.key_input.setPlaceholderText("Nhập khóa (sẽ tự điều chỉnh độ dài)")
         layout.addWidget(self.key_input)
 
         self.text_input = QTextEdit()
         self.text_input.setPlaceholderText("Nhập văn bản để mã hóa/giải mã")
         layout.addWidget(self.text_input)
 
-        self.btn_encrypt = QPushButton("Mã hóa")
+        self.btn_encrypt = QPushButton("Mã hóa Văn bản")
         self.btn_encrypt.clicked.connect(self.encrypt_text)
         layout.addWidget(self.btn_encrypt)
 
-        self.btn_decrypt = QPushButton("Giải mã")
+        self.btn_decrypt = QPushButton("Giải mã Văn bản")
         self.btn_decrypt.clicked.connect(self.decrypt_text)
         layout.addWidget(self.btn_decrypt)
 
@@ -52,51 +51,106 @@ class EncryptionApp(QWidget):
         self.setWindowTitle("Ứng dụng Mã hóa")
         self.resize(800, 600)
 
+    def adjust_key_length(self, algo, key):
+        """Điều chỉnh độ dài khóa theo thuật toán"""
+        key_bytes = key.encode()  # Chuyển chuỗi thành byte
+        required_lengths = {"AES": 32, "3DES": 24, "Blowfish": 16}  # Độ dài yêu cầu (byte)
+        required_length = required_lengths[algo]
+
+        if len(key_bytes) < required_length:
+            # Nếu ngắn hơn, thêm byte 0 vào cuối (padding)
+            key_bytes = key_bytes + b'\x00' * (required_length - len(key_bytes))
+        elif len(key_bytes) > required_length:
+            # Nếu dài hơn, cắt bớt từ đầu
+            key_bytes = key_bytes[:required_length]
+
+        return key_bytes
+
     def encrypt_text(self):
-        algo = self.combo.currentText()
+        """Gọi class Encryptor để mã hóa văn bản"""
         text = self.text_input.toPlainText()
+        algo = self.combo.currentText()
         key = self.key_input.text().strip()
 
-        encrypted_data, new_key = self.encryptor.encrypt_text(text, algo, key)
-        if encrypted_data:
-            self.result.setText(f"Mã hóa thành công:\n{encrypted_data}")
-            self.key_input.setText(new_key)
+        if key:
+            # Điều chỉnh độ dài khóa nếu người dùng nhập
+            adjusted_key = self.adjust_key_length(algo, key)
+            encryptor = Encryptor(algo, adjusted_key)
         else:
-            self.result.setText(new_key)
+            # Nếu không nhập khóa, tự sinh và hiển thị
+            encryptor = Encryptor(algo)
+            self.key_input.setText(base64.b64encode(encryptor.key).decode())
+
+        encrypted_text = encryptor.encrypt_text(text)
+        self.result.setText(f"Mã hóa thành công:\n{encrypted_text}")
 
     def decrypt_text(self):
+        """Gọi class Decryptor để giải mã văn bản"""
+        encrypted_text = self.text_input.toPlainText().strip()
         algo = self.combo.currentText()
-        encrypted_data = self.text_input.toPlainText()
         key = self.key_input.text().strip()
 
-        decrypted_data, error = self.decryptor.decrypt_text(encrypted_data, algo, key)
-        self.result.setText(decrypted_data if decrypted_data else error)
+        if not key:
+            self.result.setText("Vui lòng nhập khóa giải mã.")
+            return
+
+        # Điều chỉnh độ dài khóa
+        adjusted_key = self.adjust_key_length(algo, key)
+        key_base64 = base64.b64encode(adjusted_key).decode()  # Chuyển thành base64 để tương thích với Decryptor
+
+        decryptor = Decryptor(algo, key_base64)
+        decrypted_text = decryptor.decrypt_text(encrypted_text)
+        self.result.setText(f"Giải mã thành công:\n{decrypted_text}")
 
     def encrypt_file(self):
-        algo = self.combo.currentText()
-        key = self.key_input.text().strip()
+        """Gọi class Encryptor để mã hóa file"""
         file_path, _ = QFileDialog.getOpenFileName(self, "Chọn file để mã hóa")
-
         if not file_path:
             return
 
-        result, new_key = self.encryptor.encrypt_file(file_path, algo, key)
-        if result:
-            self.result.setText(f"Mã hóa file thành công: {result}")
-            self.key_input.setText(new_key)
+        algo = self.combo.currentText()
+        key = self.key_input.text().strip()
+
+        if key:
+            adjusted_key = self.adjust_key_length(algo, key)
+            encryptor = Encryptor(algo, adjusted_key)
         else:
-            self.result.setText(new_key)
+            encryptor = Encryptor(algo)
+            self.key_input.setText(base64.b64encode(encryptor.key).decode())
+
+        save_path, _ = QFileDialog.getSaveFileName(self, "Lưu file đã mã hóa", file_path + ".enc", "All Files (*)")
+        if not save_path:
+            self.result.setText("Hủy lưu file.")
+            return
+
+        encryptor.encrypt_file(file_path, save_path)
+        self.result.setText(f"Mã hóa file thành công: {save_path}")
 
     def decrypt_file(self):
-        algo = self.combo.currentText()
-        key = self.key_input.text().strip()
+        """Gọi class Decryptor để giải mã file"""
         file_path, _ = QFileDialog.getOpenFileName(self, "Chọn file để giải mã")
-
         if not file_path:
             return
 
-        result, error = self.decryptor.decrypt_file(file_path, algo, key)
-        if result:
-            self.result.setText(f"Giải mã file thành công: {result}")
-        else:
-            self.result.setText(error)
+        if not file_path.endswith(".enc"):
+            self.result.setText("File không hợp lệ! Vui lòng chọn file có đuôi .enc.")
+            return
+
+        algo = self.combo.currentText()
+        key = self.key_input.text().strip()
+
+        if not key:
+            self.result.setText("Vui lòng nhập khóa giải mã.")
+            return
+
+        adjusted_key = self.adjust_key_length(algo, key)
+        key_base64 = base64.b64encode(adjusted_key).decode()
+
+        decryptor = Decryptor(algo, key_base64)
+        save_path, _ = QFileDialog.getSaveFileName(self, "Lưu file giải mã", file_path[:-4], "All Files (*)")
+        if not save_path:
+            self.result.setText("Hủy lưu file.")
+            return
+
+        result = decryptor.decrypt_file(file_path, save_path)
+        self.result.setText(result)

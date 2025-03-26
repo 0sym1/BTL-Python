@@ -3,161 +3,113 @@ import hashlib
 import os
 import shutil
 from PyQt6 import QtWidgets, QtCore, QtGui
-from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLineEdit, QComboBox
+from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLineEdit, QComboBox, QStackedWidget
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
-        self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
+class MainMenuWidget(QtWidgets.QWidget):
+    def __init__(self, stacked_widget):
+        super().__init__()
+        self.stacked_widget = stacked_widget
+        self.setupUi()
 
-        # Tiêu đề chính
-        self.label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(280, 30, 250, 40))
-        font = QtGui.QFont()
-        font.setPointSize(20)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
+    def setupUi(self):
+        layout = QtWidgets.QVBoxLayout()
 
-        # Group XÓA FILE
-        self.del_group = QtWidgets.QGroupBox(parent=self.centralwidget)
-        self.del_group.setGeometry(QtCore.QRect(170, 100, 451, 300))  # Tăng chiều cao để thêm QComboBox
-        font.setPointSize(13)
-        self.del_group.setFont(font)
-        self.del_group.setObjectName("del_group")
+        title = QtWidgets.QLabel("Xóa File An Toàn")
+        title.setFont(QtGui.QFont("Arial", 20))
+        title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(title)
 
-        self.choose_file = QtWidgets.QPushButton(parent=self.del_group)
-        self.choose_file.setGeometry(QtCore.QRect(20, 30, 100, 30))
-        self.choose_file.setObjectName("choose_file")
+        self.delete_btn = QtWidgets.QPushButton("Xóa File")
+        self.delete_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
+        layout.addWidget(self.delete_btn)
+
+        self.restore_btn = QtWidgets.QPushButton("Khôi phục File")
+        self.restore_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
+        layout.addWidget(self.restore_btn)
+
+        self.check_btn = QtWidgets.QPushButton("Kiểm tra File")
+        self.check_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(3))
+        layout.addWidget(self.check_btn)
+
+        layout.addStretch()
+        self.setLayout(layout)
+
+
+class DeleteWidget(QtWidgets.QWidget):
+    def __init__(self, stacked_widget, passwords):
+        super().__init__()
+        self.stacked_widget = stacked_widget
+        self.passwords = passwords
+        self.file_path = None
+        self.temp_dir = "temp_deleted_files"
+        self.setupUi()
+
+    def setupUi(self):
+        layout = QtWidgets.QVBoxLayout()
+
+        self.del_group = QtWidgets.QGroupBox("Xóa file")
+        self.del_group.setFont(QtGui.QFont("Arial", 13))
+        group_layout = QtWidgets.QVBoxLayout()
+
+        self.choose_file = QtWidgets.QPushButton("Chọn File")
         self.choose_file.clicked.connect(self.select_file)
+        group_layout.addWidget(self.choose_file)
 
-        self.file_label = QtWidgets.QLabel(parent=self.del_group)
-        self.file_label.setGeometry(QtCore.QRect(130, 30, 280, 30))
-        self.file_label.setObjectName("file_label")
+        self.file_label = QtWidgets.QLabel("Hãy chọn file của bạn...")
+        group_layout.addWidget(self.file_label)
 
-        # Radio buttons cho tùy chọn xóa
-        self.delete_perm_radio = QtWidgets.QRadioButton(parent=self.del_group)
-        self.delete_perm_radio.setGeometry(QtCore.QRect(130, 70, 150, 20))
-        self.delete_perm_radio.setText("Xóa không khôi phục")
-        self.delete_perm_radio.setChecked(False)
+        self.delete_perm_radio = QtWidgets.QRadioButton("Xóa không khôi phục")
         self.delete_perm_radio.toggled.connect(self.toggle_fields)
+        group_layout.addWidget(self.delete_perm_radio)
 
-        self.delete_rec_radio = QtWidgets.QRadioButton(parent=self.del_group)
-        self.delete_rec_radio.setGeometry(QtCore.QRect(300, 70, 150, 20))
-        self.delete_rec_radio.setText("Xóa có khôi phục")
-        self.delete_rec_radio.setChecked(False)
+        self.delete_rec_radio = QtWidgets.QRadioButton("Xóa có khôi phục")
         self.delete_rec_radio.toggled.connect(self.toggle_fields)
+        group_layout.addWidget(self.delete_rec_radio)
 
-        # QComboBox cho thuật toán xóa (ẩn mặc định)
-        self.algorithm_label = QtWidgets.QLabel(parent=self.del_group)
-        self.algorithm_label.setGeometry(QtCore.QRect(130, 110, 100, 20))
-        self.algorithm_label.setText("Thuật toán:")
+        self.algorithm_label = QtWidgets.QLabel("Thuật toán:")
         self.algorithm_label.setVisible(False)
+        group_layout.addWidget(self.algorithm_label)
 
-        self.algorithm_combo = QComboBox(parent=self.del_group)
-        self.algorithm_combo.setGeometry(QtCore.QRect(230, 110, 200, 30))
+        self.algorithm_combo = QComboBox()
         self.algorithm_combo.addItems(["Simple", "DoD 5220.22-M", "Gutmann"])
         self.algorithm_combo.setVisible(False)
+        group_layout.addWidget(self.algorithm_combo)
 
-        # Trường nhập mật khẩu (ẩn mặc định)
-        self.password_label = QtWidgets.QLabel(parent=self.del_group)
-        self.password_label.setGeometry(QtCore.QRect(130, 150, 100, 20))
-        self.password_label.setText("Mật khẩu:")
+        self.password_label = QtWidgets.QLabel("Mật khẩu:")
         self.password_label.setVisible(False)
+        group_layout.addWidget(self.password_label)
 
-        self.password_input = QLineEdit(parent=self.del_group)
-        self.password_input.setGeometry(QtCore.QRect(230, 150, 200, 30))
+        self.password_input = QLineEdit()
         self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
         self.password_input.setVisible(False)
+        group_layout.addWidget(self.password_input)
 
-        self.delete_button = QtWidgets.QPushButton(parent=self.del_group)
-        self.delete_button.setGeometry(QtCore.QRect(150, 240, 80, 30))
-        self.delete_button.setObjectName("delete_button")
+        btn_layout = QtWidgets.QHBoxLayout()
+        self.delete_button = QtWidgets.QPushButton("Xóa")
         self.delete_button.clicked.connect(self.delete_file)
+        btn_layout.addWidget(self.delete_button)
 
-        self.cancel_button = QtWidgets.QPushButton(parent=self.del_group)
-        self.cancel_button.setGeometry(QtCore.QRect(250, 240, 80, 30))
-        self.cancel_button.setObjectName("cancel_button")
-        self.cancel_button.clicked.connect(self.cancel_delete)
+        self.cancel_button = QtWidgets.QPushButton("Quay lại")
+        self.cancel_button.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
+        btn_layout.addWidget(self.cancel_button)
+        group_layout.addLayout(btn_layout)
 
-        self.result_label = QtWidgets.QLabel(parent=self.del_group)
-        self.result_label.setGeometry(QtCore.QRect(130, 280, 300, 20))
-        self.result_label.setObjectName("result_label")
+        self.result_label = QtWidgets.QLabel("")
+        group_layout.addWidget(self.result_label)
 
-        # Group KIỂM TRA FILE
-        self.check_group = QtWidgets.QGroupBox(parent=self.centralwidget)
-        self.check_group.setGeometry(QtCore.QRect(170, 410, 451, 220))
-        font.setPointSize(13)
-        self.check_group.setFont(font)
-        self.check_group.setObjectName("check_group")
+        self.del_group.setLayout(group_layout)
+        layout.addWidget(self.del_group)
+        layout.addStretch()
+        self.setLayout(layout)
 
-        self.choose_file_2 = QtWidgets.QPushButton(parent=self.check_group)
-        self.choose_file_2.setGeometry(QtCore.QRect(20, 30, 100, 30))
-        self.choose_file_2.setObjectName("choose_file_2")
-        self.choose_file_2.clicked.connect(self.select_file_2)
-
-        self.file_label_2 = QtWidgets.QLabel(parent=self.check_group)
-        self.file_label_2.setGeometry(QtCore.QRect(130, 30, 280, 30))
-        self.file_label_2.setObjectName("file_label_2")
-
-        self.choose_file_3 = QtWidgets.QPushButton(parent=self.check_group)
-        self.choose_file_3.setGeometry(QtCore.QRect(20, 70, 100, 30))
-        self.choose_file_3.setObjectName("choose_file_3")
-        self.choose_file_3.clicked.connect(self.select_file_3)
-
-        self.file_label_3 = QtWidgets.QLabel(parent=self.check_group)
-        self.file_label_3.setGeometry(QtCore.QRect(130, 70, 280, 30))
-        self.file_label_3.setObjectName("file_label_3")
-
-        self.sha256_radio = QtWidgets.QRadioButton(parent=self.check_group)
-        self.sha256_radio.setGeometry(QtCore.QRect(130, 110, 100, 20))
-        self.sha256_radio.setText("SHA-256")
-        self.sha256_radio.setChecked(False)
-
-        self.md5_radio = QtWidgets.QRadioButton(parent=self.check_group)
-        self.md5_radio.setGeometry(QtCore.QRect(240, 110, 100, 20))
-        self.md5_radio.setText("MD5")
-        self.md5_radio.setChecked(False)
-
-        self.check_button = QtWidgets.QPushButton(parent=self.check_group)
-        self.check_button.setGeometry(QtCore.QRect(150, 160, 100, 30))
-        self.check_button.setObjectName("check_button")
-        self.check_button.clicked.connect(self.check_hash)
-
-        self.result_label_2 = QtWidgets.QLabel(parent=self.check_group)
-        self.result_label_2.setGeometry(QtCore.QRect(20, 200, 400, 20))
-        self.result_label_2.setObjectName("result_label_2")
-
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-        self.file_path = None
-        self.file_path_2 = None  # File gốc
-        self.file_path_3 = None  # File giải mã
-        self.temp_dir = "temp_deleted_files"  # Thư mục tạm để lưu file có thể khôi phục
-        self.passwords = {}  # Lưu trữ mật khẩu cho từng file
-
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Xóa File An Toàn"))
-        self.label.setText(_translate("MainWindow", "Xóa file an toàn"))
-        self.del_group.setTitle(_translate("MainWindow", "Xóa file"))
-        self.choose_file.setText(_translate("MainWindow", "Chọn File"))
-        self.file_label.setText(_translate("MainWindow", "Hãy chọn file của bạn..."))
-        self.delete_button.setText(_translate("MainWindow", "Xóa"))
-        self.cancel_button.setText(_translate("MainWindow", "Hủy"))
-        self.check_group.setTitle(_translate("MainWindow", "Kiểm tra file"))
-        self.choose_file_2.setText(_translate("MainWindow", "Chọn File Gốc"))
-        self.file_label_2.setText(_translate("MainWindow", "Hãy chọn file gốc..."))
-        self.choose_file_3.setText(_translate("MainWindow", "Chọn File Giải Mã"))
-        self.file_label_3.setText(_translate("MainWindow", "Hãy chọn file giải mã..."))
-        self.check_button.setText(_translate("MainWindow", "Kiểm tra"))
+    def select_file(self):
+        file_name, _ = QFileDialog.getOpenFileName()
+        if file_name:
+            self.file_path = file_name
+            self.file_label.setText(file_name)
 
     def toggle_fields(self):
-        # Hiển thị hoặc ẩn các trường dựa trên tùy chọn xóa
         if self.delete_perm_radio.isChecked():
             self.algorithm_label.setVisible(True)
             self.algorithm_combo.setVisible(True)
@@ -174,11 +126,244 @@ class Ui_MainWindow(object):
             self.password_label.setVisible(False)
             self.password_input.setVisible(False)
 
-    def select_file(self):
-        file_name, _ = QFileDialog.getOpenFileName()
+    def secure_overwrite(self, file_path, method="simple"):
+        file_size = os.path.getsize(file_path)
+        if method == "simple":
+            with open(file_path, "rb+") as f:
+                f.write(b'\x00' * file_size)
+        elif method == "dod":
+            with open(file_path, "rb+") as f:
+                f.write(b'\x00' * file_size)
+                f.seek(0)
+                f.write(b'\xFF' * file_size)
+                f.seek(0)
+                f.write(os.urandom(file_size))
+        elif method == "gutmann":
+            patterns = [
+                lambda: os.urandom(file_size),
+                lambda: os.urandom(file_size),
+                lambda: os.urandom(file_size),
+                lambda: os.urandom(file_size),
+                lambda: b'\x55' * file_size,
+                lambda: b'\xAA' * file_size,
+                lambda: b'\x92\x49\x24' * (file_size // 3 + 1),
+                lambda: b'\x49\x24\x92' * (file_size // 3 + 1),
+                lambda: b'\x24\x92\x49' * (file_size // 3 + 1),
+            ] + [lambda: os.urandom(file_size) for _ in range(31 - len(patterns))]
+            with open(file_path, "rb+") as f:
+                for pattern in patterns[:35]:
+                    f.seek(0)
+                    data = pattern()[:file_size]
+                    f.write(data)
+
+    def delete_file(self):
+        if not self.file_path:
+            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn file để xóa!")
+            return
+
+        if not (self.delete_perm_radio.isChecked() or self.delete_rec_radio.isChecked()):
+            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn một tùy chọn xóa!")
+            return
+
+        try:
+            if self.delete_perm_radio.isChecked():
+                algorithm = self.algorithm_combo.currentText().lower()
+                if algorithm == "dod 5220.22-m":
+                    algorithm = "dod"
+                self.secure_overwrite(self.file_path, algorithm)
+                os.remove(self.file_path)
+                QMessageBox.information(self, "Thành công",
+                                        f"File đã được xóa vĩnh viễn bằng {self.algorithm_combo.currentText()}!")
+            elif self.delete_rec_radio.isChecked():
+                password = self.password_input.text()
+                if not password:
+                    QMessageBox.warning(self, "Lỗi", "Vui lòng nhập mật khẩu để xóa có khôi phục!")
+                    return
+
+                if not os.path.exists(self.temp_dir):
+                    os.makedirs(self.temp_dir)
+
+                file_name = os.path.basename(self.file_path)
+                temp_path = os.path.join(self.temp_dir, file_name)
+                # Chuẩn hóa đường dẫn để tránh lỗi do dấu phân cách
+                temp_path = os.path.normpath(temp_path)
+                shutil.move(self.file_path, temp_path)
+                self.passwords[temp_path] = hashlib.sha256(password.encode()).hexdigest()
+                # In thông tin debug
+                print(f"Added to passwords: {temp_path} -> {self.passwords[temp_path]}")
+                print(f"Current passwords dict: {self.passwords}")
+                QMessageBox.information(self, "Thành công", "File đã được xóa có khôi phục!\n"
+                                                            "Lưu ý: File đang ở thư mục tạm và cần mật khẩu để khôi phục.")
+
+            self.file_label.setText("Hãy chọn file của bạn...")
+            self.file_path = None
+            self.password_input.clear()
+        except Exception as e:
+            QMessageBox.warning(self, "Lỗi", f"Không thể xóa file: {str(e)}")
+
+
+class RestoreWidget(QtWidgets.QWidget):
+    def __init__(self, stacked_widget, passwords):
+        super().__init__()
+        self.stacked_widget = stacked_widget
+        self.passwords = passwords
+        self.restore_file_path = None
+        self.temp_dir = "temp_deleted_files"
+        self.setupUi()
+
+    def setupUi(self):
+        layout = QtWidgets.QVBoxLayout()
+
+        self.restore_group = QtWidgets.QGroupBox("Khôi phục file")
+        self.restore_group.setFont(QtGui.QFont("Arial", 13))
+        group_layout = QtWidgets.QVBoxLayout()
+
+        self.choose_restore_file = QtWidgets.QPushButton("Chọn File")
+        self.choose_restore_file.clicked.connect(self.select_restore_file)
+        group_layout.addWidget(self.choose_restore_file)
+
+        self.restore_file_label = QtWidgets.QLabel("Hãy chọn file để khôi phục...")
+        group_layout.addWidget(self.restore_file_label)
+
+        self.restore_password_label = QtWidgets.QLabel("Mật khẩu:")
+        group_layout.addWidget(self.restore_password_label)
+
+        self.restore_password_input = QLineEdit()
+        self.restore_password_input.setEchoMode(QLineEdit.EchoMode.Password)
+        group_layout.addWidget(self.restore_password_input)
+
+        btn_layout = QtWidgets.QHBoxLayout()
+        self.restore_button = QtWidgets.QPushButton("Khôi phục")
+        self.restore_button.clicked.connect(self.restore_file)
+        btn_layout.addWidget(self.restore_button)
+
+        self.back_button = QtWidgets.QPushButton("Quay lại")
+        self.back_button.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
+        btn_layout.addWidget(self.back_button)
+        group_layout.addLayout(btn_layout)
+
+        self.restore_result_label = QtWidgets.QLabel("")
+        group_layout.addWidget(self.restore_result_label)
+
+        self.restore_group.setLayout(group_layout)
+        layout.addWidget(self.restore_group)
+        layout.addStretch()
+        self.setLayout(layout)
+
+    def select_restore_file(self):
+        file_name, _ = QFileDialog.getOpenFileName(directory=self.temp_dir)
         if file_name:
-            self.file_path = file_name
-            self.file_label.setText(file_name)
+            # Chuẩn hóa đường dẫn
+            file_name = os.path.normpath(file_name)
+            self.restore_file_path = file_name
+            self.restore_file_label.setText(file_name)
+            # Kiểm tra ngay khi chọn file
+            if not os.path.exists(file_name):
+                self.restore_result_label.setText("File không tồn tại trong thư mục tạm!")
+            elif file_name not in self.passwords:
+                self.restore_result_label.setText("File không có trong danh sách khôi phục!")
+                # In thông tin debug
+                print(f"Selected file: {file_name}")
+                print(f"Current passwords dict: {self.passwords}")
+            else:
+                self.restore_result_label.setText("")
+
+    def restore_file(self):
+        if not self.restore_file_path:
+            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn file để khôi phục!")
+            return
+
+        password = self.restore_password_input.text()
+        if not password:
+            QMessageBox.warning(self, "Lỗi", "Vui lòng nhập mật khẩu!")
+            return
+
+        # Kiểm tra file có tồn tại không
+        if not os.path.exists(self.restore_file_path):
+            QMessageBox.warning(self, "Lỗi", "File không còn tồn tại trong thư mục tạm!")
+            return
+
+        stored_hash = self.passwords.get(self.restore_file_path)
+        if not stored_hash:
+            QMessageBox.warning(self, "Lỗi", "File không có trong danh sách khôi phục!")
+            # In thông tin debug
+            print(f"Attempting to restore: {self.restore_file_path}")
+            print(f"Current passwords dict: {self.passwords}")
+            return
+
+        input_hash = hashlib.sha256(password.encode()).hexdigest()
+        if input_hash == stored_hash:
+            restore_path, _ = QFileDialog.getSaveFileName(self, "Chọn vị trí khôi phục",
+                                                          os.path.basename(self.restore_file_path))
+            if restore_path:
+                try:
+                    shutil.move(self.restore_file_path, restore_path)
+                    del self.passwords[self.restore_file_path]
+                    self.restore_file_label.setText("Hãy chọn file để khôi phục...")
+                    self.restore_password_input.clear()
+                    self.restore_file_path = None
+                    self.restore_result_label.setText("")
+                    QMessageBox.information(self, "Thành công", "File đã được khôi phục thành công!")
+                except Exception as e:
+                    QMessageBox.warning(self, "Lỗi", f"Không thể khôi phục file: {str(e)}")
+            else:
+                QMessageBox.warning(self, "Hủy bỏ", "Khôi phục file đã bị hủy.")
+        else:
+            self.restore_result_label.setText("Mật khẩu không đúng!")
+
+
+class CheckWidget(QtWidgets.QWidget):
+    def __init__(self, stacked_widget):
+        super().__init__()
+        self.stacked_widget = stacked_widget
+        self.file_path_2 = None
+        self.file_path_3 = None
+        self.setupUi()
+
+    def setupUi(self):
+        layout = QtWidgets.QVBoxLayout()
+
+        self.check_group = QtWidgets.QGroupBox("Kiểm tra file")
+        self.check_group.setFont(QtGui.QFont("Arial", 13))
+        group_layout = QtWidgets.QVBoxLayout()
+
+        self.choose_file_2 = QtWidgets.QPushButton("Chọn File Gốc")
+        self.choose_file_2.clicked.connect(self.select_file_2)
+        group_layout.addWidget(self.choose_file_2)
+
+        self.file_label_2 = QtWidgets.QLabel("Hãy chọn file gốc...")
+        group_layout.addWidget(self.file_label_2)
+
+        self.choose_file_3 = QtWidgets.QPushButton("Chọn File Giải Mã")
+        self.choose_file_3.clicked.connect(self.select_file_3)
+        group_layout.addWidget(self.choose_file_3)
+
+        self.file_label_3 = QtWidgets.QLabel("Hãy chọn file giải mã...")
+        group_layout.addWidget(self.file_label_3)
+
+        self.sha256_radio = QtWidgets.QRadioButton("SHA-256")
+        group_layout.addWidget(self.sha256_radio)
+
+        self.md5_radio = QtWidgets.QRadioButton("MD5")
+        group_layout.addWidget(self.md5_radio)
+
+        btn_layout = QtWidgets.QHBoxLayout()
+        self.check_button = QtWidgets.QPushButton("Kiểm tra")
+        self.check_button.clicked.connect(self.check_hash)
+        btn_layout.addWidget(self.check_button)
+
+        self.back_button = QtWidgets.QPushButton("Quay lại")
+        self.back_button.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
+        btn_layout.addWidget(self.back_button)
+        group_layout.addLayout(btn_layout)
+
+        self.result_label_2 = QtWidgets.QLabel("")
+        group_layout.addWidget(self.result_label_2)
+
+        self.check_group.setLayout(group_layout)
+        layout.addWidget(self.check_group)
+        layout.addStretch()
+        self.setLayout(layout)
 
     def select_file_2(self):
         file_name, _ = QFileDialog.getOpenFileName()
@@ -192,98 +377,16 @@ class Ui_MainWindow(object):
             self.file_path_3 = file_name
             self.file_label_3.setText(file_name)
 
-    def secure_overwrite(self, file_path, method="simple"):
-        file_size = os.path.getsize(file_path)
-
-        if method == "simple":
-            with open(file_path, "rb+") as f:
-                f.write(b'\x00' * file_size)
-
-        elif method == "dod":
-            with open(file_path, "rb+") as f:
-                f.write(b'\x00' * file_size)
-                f.seek(0)
-                f.write(b'\xFF' * file_size)
-                f.seek(0)
-                f.write(os.urandom(file_size))
-
-        elif method == "gutmann":
-            patterns = [
-                           lambda: os.urandom(file_size),
-                           lambda: os.urandom(file_size),
-                           lambda: os.urandom(file_size),
-                           lambda: os.urandom(file_size),
-                           lambda: b'\x55' * file_size,
-                           lambda: b'\xAA' * file_size,
-                           lambda: b'\x92\x49\x24' * (file_size // 3 + 1),
-                           lambda: b'\x49\x24\x92' * (file_size // 3 + 1),
-                           lambda: b'\x24\x92\x49' * (file_size // 3 + 1),
-                       ] + [lambda: os.urandom(file_size) for _ in range(31 - len(patterns))]
-
-            with open(file_path, "rb+") as f:
-                for pattern in patterns[:35]:
-                    f.seek(0)
-                    data = pattern()[:file_size]
-                    f.write(data)
-
-    def delete_file(self):
-        if not self.file_path:
-            QMessageBox.warning(None, "Lỗi", "Vui lòng chọn file để xóa!")
-            return
-
-        if not (self.delete_perm_radio.isChecked() or self.delete_rec_radio.isChecked()):
-            QMessageBox.warning(None, "Lỗi", "Vui lòng chọn một tùy chọn xóa!")
-            return
-
-        try:
-            if self.delete_perm_radio.isChecked():
-                # Xóa không khôi phục với thuật toán được chọn
-                algorithm = self.algorithm_combo.currentText().lower()
-                if algorithm == "dod 5220.22-m":
-                    algorithm = "dod"
-                self.secure_overwrite(self.file_path, algorithm)
-                os.remove(self.file_path)
-                QMessageBox.information(None, "Thành công",
-                                        f"File đã được xóa vĩnh viễn bằng {self.algorithm_combo.currentText()}!")
-            elif self.delete_rec_radio.isChecked():
-                # Xóa có khôi phục
-                password = self.password_input.text()
-                if not password:
-                    QMessageBox.warning(None, "Lỗi", "Vui lòng nhập mật khẩu để xóa có khôi phục!")
-                    return
-
-                if not os.path.exists(self.temp_dir):
-                    os.makedirs(self.temp_dir)
-
-                file_name = os.path.basename(self.file_path)
-                temp_path = os.path.join(self.temp_dir, file_name)
-                shutil.move(self.file_path, temp_path)
-                self.passwords[temp_path] = hashlib.sha256(password.encode()).hexdigest()
-                QMessageBox.information(None, "Thành công", "File đã được xóa có khôi phục!\n"
-                                                            "Lưu ý: File đang ở thư mục tạm và cần mật khẩu để khôi phục.")
-
-            self.file_label.setText("Hãy chọn file của bạn...")
-            self.file_path = None
-            self.password_input.clear()
-        except Exception as e:
-            QMessageBox.warning(None, "Lỗi", f"Không thể xóa file: {str(e)}")
-
-    def cancel_delete(self):
-        QMessageBox.information(None, "Hủy bỏ", "Xóa file đã được hủy.")
-        self.file_label.setText("Hãy chọn file của bạn...")
-        self.file_path = None
-        self.password_input.clear()
-
     def check_hash(self):
         if not self.file_path_2:
-            QMessageBox.warning(None, "Lỗi", "Vui lòng chọn file gốc!")
+            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn file gốc!")
             return
         if not self.file_path_3:
-            QMessageBox.warning(None, "Lỗi", "Vui lòng chọn file giải mã!")
+            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn file giải mã!")
             return
 
         if not (self.sha256_radio.isChecked() or self.md5_radio.isChecked()):
-            QMessageBox.warning(None, "Lỗi", "Vui lòng chọn một thuật toán hash!")
+            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn một thuật toán hash!")
             return
 
         algorithm = "sha256" if self.sha256_radio.isChecked() else "md5"
@@ -310,10 +413,30 @@ class Ui_MainWindow(object):
         return hash_func.hexdigest()
 
 
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Xóa File An Toàn")
+        self.resize(800, 600)
+
+        self.stacked_widget = QStackedWidget()
+        self.setCentralWidget(self.stacked_widget)
+
+        self.passwords = {}
+
+        self.main_menu = MainMenuWidget(self.stacked_widget)
+        self.delete_widget = DeleteWidget(self.stacked_widget, self.passwords)
+        self.restore_widget = RestoreWidget(self.stacked_widget, self.passwords)
+        self.check_widget = CheckWidget(self.stacked_widget)
+
+        self.stacked_widget.addWidget(self.main_menu)
+        self.stacked_widget.addWidget(self.delete_widget)
+        self.stacked_widget.addWidget(self.restore_widget)
+        self.stacked_widget.addWidget(self.check_widget)
+
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    window = MainWindow()
+    window.show()
     sys.exit(app.exec())

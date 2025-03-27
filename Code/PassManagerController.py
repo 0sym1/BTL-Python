@@ -4,12 +4,15 @@ import PassManagerScene
 from EditAccountsController import EditAccountsController
 from ChangePasswordController import ChangePasswordController
 from ChangeEmailController import ChangeEmailController
+from Decrypt import Decryptor
+from Encrypt import Encryptor
+import base64
 
 ############################################
 ui = ''
 app = QApplication(sys.argv)
 window = ''
-
+key = ''
 
 ############################################
 
@@ -22,6 +25,8 @@ class PassManagerController(PassManagerScene.Ui_MainWindow):
         self.load_data_account()
         PassManagerController.listener(self)
         self.scene_main = scene_main
+
+        self.get_key()
 
     def listener(self):
         self.Back_Button.clicked.connect(self.on_back_button_click)
@@ -76,14 +81,31 @@ class PassManagerController(PassManagerScene.Ui_MainWindow):
         with open("Data/data_accounts", "r", encoding="utf-8") as files:
             lines = files.readlines()
 
+            global key
+            self.get_key()
+
+            encrypt_key = Encryptor.adjust_key_length("AES", key)
+            print("key ", key, " encrypt_key ", encrypt_key)
+            key64 = base64.b64encode(encrypt_key).decode()
+            decryptor = Decryptor("AES", key64)
+
             self.tableWidget.setRowCount(len(lines))  # Đặt số hàng theo dữ liệu
             self.tableWidget.setColumnCount(4)  # Giả sử file có 3 cột, chỉnh lại nếu cần
 
             for row, line in enumerate(lines):
                 arr_line = line.strip().split("|")
-                if(len(arr_line) == 0): continue
+                if(len(arr_line) <= 1): continue
+                print(arr_line)
+                arr_line[2] = decryptor.decrypt_text(arr_line[2].strip())
                 for col, value in enumerate(arr_line):
                     self.tableWidget.setItem(row, col, QTableWidgetItem(value.strip()))
+
+    def get_key(self):
+        global key
+
+        with open("Data/data_tmp", "r", encoding="utf-8") as files:
+            lines = files.readlines()
+            key = lines[0].strip().split(":")[1].strip()
 
 
 # if __name__ == "__main__":

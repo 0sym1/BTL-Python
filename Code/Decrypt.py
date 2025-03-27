@@ -13,6 +13,7 @@ class Decryptor:
             nonce, tag, ciphertext = encrypted_data[:16], encrypted_data[16:32], encrypted_data[32:]
 
             if self.algo == "AES":
+                print("key de: ", self.key)
                 cipher = AES.new(self.key, AES.MODE_EAX, nonce=nonce)
             elif self.algo == "3DES":
                 cipher = DES3.new(self.key, DES3.MODE_EAX, nonce=nonce)

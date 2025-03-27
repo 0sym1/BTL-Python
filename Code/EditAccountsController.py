@@ -3,12 +3,14 @@ from datetime import datetime
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 from PyQt6.QtCore import pyqtSignal
 import EditAccountsScene
+from Encrypt import Encryptor
 
 ############################################
 ui = ''
 app = QApplication(sys.argv)
 window = ''
 
+key = ''
 
 ############################################
 
@@ -22,6 +24,8 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
 
         EditAccountsController.listener(self)
         self.scene_back = scene_main
+
+        self.get_key()
 
     def listener(self):
         self.back_button.clicked.connect(self.on_back_button_click)
@@ -42,8 +46,13 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
             self.notice1_label.setText("Account already exist")
             return
         
-        with open("Data/data_accounts", "a", encoding="utf-8") as files:
-            files.write(self.account_lineEdit.text() + " | " + self.username_lineEdit.text() + " | " + self.password_lineEdit.text() + " | " + datetime.today().strftime("%d/%m/%Y") + "\n")
+        global key
+        encrypt_key = Encryptor.adjust_key_length("AES", key)
+        encryptor = Encryptor("AES", encrypt_key)
+        encrypt_pass = encryptor.encrypt_text(self.password_lineEdit.text())
+        
+        with open("Data/data_accounts", "w", encoding="utf-8") as files:
+            files.write(self.account_lineEdit.text() + " | " + self.username_lineEdit.text() + " | " + encrypt_pass + " | " + datetime.today().strftime("%d/%m/%Y") + "\n")
         files.close()
         self.account_lineEdit.setText("")
         self.username_lineEdit.setText("")
@@ -67,11 +76,16 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
             lines = files.readlines()
         files.close()
 
+        global key
+        encrypt_key = Encryptor.adjust_key_length("AES", key)
+        encryptor = Encryptor("AES", encrypt_key)
+        encrypt_pass = encryptor.encrypt_text(self.password_lineEdit.text())
+
         with open("Data/data_accounts", "w", encoding="utf-8") as files:
             for line in lines:
                 arr_line = line.strip().split("|")
                 if(arr_line[0].strip() == self.account_lineEdit.text()):
-                    files.write(self.account_lineEdit.text() + " | " + self.username_lineEdit.text() + " | " + self.password_lineEdit.text() + " | " + datetime.today().strftime("%d/%m/%Y") + "\n")
+                    files.write(self.account_lineEdit.text() + " | " + self.username_lineEdit.text() + " | " + encrypt_pass + " | " + datetime.today().strftime("%d/%m/%Y") + "\n")
                 else:
                     files.write(line)
 
@@ -82,8 +96,6 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
         self.notice1_label.setText("Edit account successfully")
         self.update_data_account.emit()
 
-
-    
 
         
     def check_fill_input(self):
@@ -99,7 +111,13 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
                 if(arr_line[0].strip() == self.account_lineEdit.text()):
                     return True
         return False
-        
+    
+    def get_key(self):
+        global key
+
+        with open("Data/data_tmp", "r", encoding="utf-8") as files:
+            lines = files.readlines()
+            key = lines[0].strip().split(":")[1].strip()
     
 
 

@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QLabel,
                              QFileDialog, QComboBox, QLineEdit, QTextEdit)
 import base64
-from Code.Encrypt import Encryptor
-from Code.Decrypt import Decryptor
+from Encrypt import Encryptor
+from Decrypt import Decryptor
 
 class EncryptionApp(QWidget):
     def __init__(self):

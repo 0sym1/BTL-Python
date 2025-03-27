@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 import ChangePasswordScene
-from EditAccountsController import EditAccountsController
+from HashData import HashData
 
 ############################################
 ui = ''
@@ -32,7 +32,7 @@ class ChangePasswordController(ChangePasswordScene.Ui_MainWindow):
             lines = files.readlines()
             current_pass = lines[0].strip().split(":")[1].strip()
 
-        if(self.current_pass_line.text() != current_pass):
+        if(HashData.verify(self.current_pass_line.text(), current_pass) == False):
             self.notice_label.setText("Current password is incorrect")
             return
 
@@ -44,12 +44,14 @@ class ChangePasswordController(ChangePasswordScene.Ui_MainWindow):
             self.notice_label.setText("New password does not match")
             return
         
-        if(self.new_pass_line.text() == current_pass):
+        if(HashData.verify(self.new_pass_line.text(), current_pass)):
             self.notice_label.setText("New password must be different from the current password")
             return
         
+        hash_pass = HashData.hasing(self.new_pass_line.text())
+        
         with open("Data/data_account_manager", "w", encoding="utf-8") as files:
-            files.write(f"Password: {self.new_pass_line.text()}\n")
+            files.write(f"Password: {hash_pass}\n")
             files.write(f"Email: {lines[1].strip().split(':')[1].strip()}\n")
 
         self.notice_label.setText("Change password successfully")

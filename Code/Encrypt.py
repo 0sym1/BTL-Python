@@ -45,3 +45,18 @@ class Encryptor:
 
         with open(save_path, "wb") as f:
             f.write(cipher.nonce + tag + ciphertext)
+    
+    def adjust_key_length(algo, key):
+        """Điều chỉnh độ dài khóa theo thuật toán"""
+        key_bytes = key.encode()  # Chuyển chuỗi thành byte
+        required_lengths = {"AES": 32, "3DES": 24, "Blowfish": 16}  # Độ dài yêu cầu (byte)
+        required_length = required_lengths[algo]
+
+        if len(key_bytes) < required_length:
+            # Nếu ngắn hơn, thêm byte 0 vào cuối (padding)
+            key_bytes = key_bytes + b'\x00' * (required_length - len(key_bytes))
+        elif len(key_bytes) > required_length:
+            # Nếu dài hơn, cắt bớt từ đầu
+            key_bytes = key_bytes[:required_length]
+
+        return key_bytes

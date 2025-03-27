@@ -3,6 +3,8 @@ from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtCore import pyqtSignal
 import CheckPassScene
 import TwoFactorAuth
+from HashData import HashData
+from Encrypt import Encryptor
 
 ############################################
 ui = ''
@@ -49,7 +51,23 @@ class CheckPassController(CheckPassScene.Ui_MainWindow):
             self.check_otp(input)
         
     def check_password(self, input):
-        if(input == password):
+        #save pass to tmp file data
+        with open("Data/data_tmp", "w", encoding="utf-8") as files:
+            files.write(f"Password_tmp: {input}\n")
+
+        hash_pass = HashData.hasing(input)
+
+        global password
+        global email
+
+        #read pass from data
+        with open("Data/data_account_manager", "r", encoding="utf-8") as files:
+            lines = files.readlines()
+            print(lines)
+            password = lines[0].strip().split(":")[1].strip()
+            email = lines[1].strip().split(":")[1].strip()
+
+        if(HashData.verify(input, password)):
             self.label.setText('OTP has been sent to your email')
             self.lineEdit.setText('')
             self.authentication_step = 2

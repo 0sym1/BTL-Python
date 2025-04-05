@@ -52,32 +52,24 @@ class EncryptionApp(QWidget):
         self.resize(800, 600)
 
     def adjust_key_length(self, algo, key):
-        """Điều chỉnh độ dài khóa theo thuật toán"""
-        key_bytes = key.encode()  # Chuyển chuỗi thành byte
-        required_lengths = {"AES": 32, "3DES": 24, "Blowfish": 16}  # Độ dài yêu cầu (byte)
+        key_bytes = key.encode()
+        required_lengths = {"AES": 32, "3DES": 24, "Blowfish": 16}
         required_length = required_lengths[algo]
-
         if len(key_bytes) < required_length:
-            # Nếu ngắn hơn, thêm byte 0 vào cuối (padding)
             key_bytes = key_bytes + b'\x00' * (required_length - len(key_bytes))
         elif len(key_bytes) > required_length:
-            # Nếu dài hơn, cắt bớt từ đầu
             key_bytes = key_bytes[:required_length]
-
         return key_bytes
 
     def encrypt_text(self):
-        """Gọi class Encryptor để mã hóa văn bản"""
         text = self.text_input.toPlainText()
         algo = self.combo.currentText()
         key = self.key_input.text().strip()
 
         if key:
-            # Điều chỉnh độ dài khóa nếu người dùng nhập
             adjusted_key = self.adjust_key_length(algo, key)
             encryptor = Encryptor(algo, adjusted_key)
         else:
-            # Nếu không nhập khóa, tự sinh và hiển thị
             encryptor = Encryptor(algo)
             self.key_input.setText(base64.b64encode(encryptor.key).decode())
 
@@ -85,7 +77,6 @@ class EncryptionApp(QWidget):
         self.result.setText(f"Mã hóa thành công:\n{encrypted_text}")
 
     def decrypt_text(self):
-        """Gọi class Decryptor để giải mã văn bản"""
         encrypted_text = self.text_input.toPlainText().strip()
         algo = self.combo.currentText()
         key = self.key_input.text().strip()
@@ -94,16 +85,14 @@ class EncryptionApp(QWidget):
             self.result.setText("Vui lòng nhập khóa giải mã.")
             return
 
-        # Điều chỉnh độ dài khóa
-        adjusted_key = self.adjust_key_length(algo, key)
-        key_base64 = base64.b64encode(adjusted_key).decode()  # Chuyển thành base64 để tương thích với Decryptor
-
-        decryptor = Decryptor(algo, key_base64)
-        decrypted_text = decryptor.decrypt_text(encrypted_text)
-        self.result.setText(f"Giải mã thành công:\n{decrypted_text}")
+        try:
+            decryptor = Decryptor(algo, key)
+            decrypted_text = decryptor.decrypt_text(encrypted_text)
+            self.result.setText(f"Giải mã thành công:\n{decrypted_text}")
+        except ValueError as e:
+            self.result.setText(f"Lỗi: {str(e)}")
 
     def encrypt_file(self):
-        """Gọi class Encryptor để mã hóa file"""
         file_path, _ = QFileDialog.getOpenFileName(self, "Chọn file để mã hóa")
         if not file_path:
             return
@@ -123,11 +112,10 @@ class EncryptionApp(QWidget):
             self.result.setText("Hủy lưu file.")
             return
 
-        encryptor.encrypt_file(file_path, save_path)
-        self.result.setText(f"Mã hóa file thành công: {save_path}")
+        result = encryptor.encrypt_file(file_path, save_path)
+        self.result.setText(result)
 
     def decrypt_file(self):
-        """Gọi class Decryptor để giải mã file"""
         file_path, _ = QFileDialog.getOpenFileName(self, "Chọn file để giải mã")
         if not file_path:
             return
@@ -143,14 +131,14 @@ class EncryptionApp(QWidget):
             self.result.setText("Vui lòng nhập khóa giải mã.")
             return
 
-        adjusted_key = self.adjust_key_length(algo, key)
-        key_base64 = base64.b64encode(adjusted_key).decode()
+        try:
+            decryptor = Decryptor(algo, key)
+            save_path, _ = QFileDialog.getSaveFileName(self, "Lưu file giải mã", file_path[:-4], "All Files (*)")
+            if not save_path:
+                self.result.setText("Hủy lưu file.")
+                return
 
-        decryptor = Decryptor(algo, key_base64)
-        save_path, _ = QFileDialog.getSaveFileName(self, "Lưu file giải mã", file_path[:-4], "All Files (*)")
-        if not save_path:
-            self.result.setText("Hủy lưu file.")
-            return
-
-        result = decryptor.decrypt_file(file_path, save_path)
-        self.result.setText(result)
+            result = decryptor.decrypt_file(file_path, save_path)
+            self.result.setText(result)
+        except ValueError as e:
+            self.result.setText(f"Lỗi: {str(e)}")

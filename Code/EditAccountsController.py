@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 from PyQt6.QtCore import pyqtSignal
 import EditAccountsScene
 from Encrypt import Encryptor
+from AI.AIPass import AIPass
 
 ############################################
 ui = ''
@@ -46,6 +47,16 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
             self.notice1_label.setText("Account already exist")
             return
         
+        AIpass = AIPass()
+        classifier = AIpass.classifier_pass(self.password_lineEdit.text())
+        if(classifier == 0):
+            self.notice1_label.setText("Password is too weak")
+            return
+        
+        if(classifier == 1):
+            self.notice1_label.setText("Password is weak")
+            return
+        
         global key
         encrypt_key = Encryptor.adjust_key_length("AES", key)
         encryptor = Encryptor("AES", encrypt_key)
@@ -68,6 +79,16 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
         
         if(self.check_account_exist() == False):
             self.notice1_label.setText("Account does not exist")
+            return
+        
+        AIpass = AIPass()
+        classifier = AIpass.classifier_pass(self.password_lineEdit.text())
+        if(classifier == 0):
+            self.notice1_label.setText("Password is too weak")
+            return
+        
+        if(classifier == 1):
+            self.notice1_label.setText("Password is weak")
             return
         
         line = []

@@ -2,6 +2,7 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 import ChangePasswordScene
 from HashData import HashData
+from AI.AIPass import AIPass
 
 ############################################
 ui = ''
@@ -48,13 +49,23 @@ class ChangePasswordController(ChangePasswordScene.Ui_MainWindow):
             self.notice_label.setText("New password must be different from the current password")
             return
         
+        AIpass = AIPass()
+        classifier = AIpass.classifier_pass(self.new_pass_line.text())
+        if(classifier == 0):
+            self.notice_label.setText("Password is too weak")
+            return
+        
+        if(classifier == 1):
+            self.notice_label.setText("Password is weak")
+            return
+        
         hash_pass = HashData.hasing(self.new_pass_line.text())
         
         with open("Data/data_account_manager", "w", encoding="utf-8") as files:
             files.write(f"Password: {hash_pass}\n")
             files.write(f"Email: {lines[1].strip().split(':')[1].strip()}\n")
 
-        self.notice_label.setText("Change password successfully")
+        self.notice_label.setText("Password is strong! Change password successfully")
         self.current_pass_line.setText("")
         self.new_pass_line.setText("")
         self.cf_new_pass_line.setText("")

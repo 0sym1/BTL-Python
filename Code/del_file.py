@@ -413,7 +413,7 @@ class CheckWidget(QtWidgets.QWidget):
         return hash_func.hexdigest()
 
 
-class MainWindow(QtWidgets.QMainWindow):
+class MainWindowDelFile(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Xóa File An Toàn")
@@ -437,6 +437,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow()
+    window = MainWindowDelFile()
     window.show()
     sys.exit(app.exec())

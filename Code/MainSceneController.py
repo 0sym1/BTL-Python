@@ -1,9 +1,13 @@
 import sys
+import os
 from PyQt6.QtWidgets import QApplication, QMainWindow
 import MainScene, CheckPassScene, PassManagerScene
 from CheckPassController import CheckPassController
 from PassManagerController import PassManagerController
 from EncryptionApp import EncryptionApp
+from del_file import MainWindowDelFile
+
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 ############################################
 ui = ''
 app = QApplication(sys.argv)
@@ -34,6 +38,16 @@ class MyApp(QMainWindow, MainScene.Ui_MainWindow):
         self.window2.login_successful.connect(self.go_to_pass_manager_scene)
         self.window2.show()
 
+    def on_Encrypt_button_click(self):
+        self.window2 = EncryptionApp()
+        window.hide()
+        self.window2.show()
+
+    def on_SecureFile_button_click(self):
+        self.window2 = MainWindowDelFile()
+        window.hide()
+        self.window2.show()
+
     def go_to_pass_manager_scene(self):
         # ui =  PassManagerScene.Ui_MainWindow()
         # ui.setupUi(window)
@@ -45,16 +59,6 @@ class MyApp(QMainWindow, MainScene.Ui_MainWindow):
         window.hide()
         self.window2.show()
         
-
-
-    def on_Encrypt_button_click(self):
-        self.window2 = EncryptionApp()
-        window.hide()
-        self.window2.show()
-
-    def on_SecureFile_button_click(self):
-        self.label.setText(self.lineEdit.text())
-
 
 
 if __name__ == "__main__":

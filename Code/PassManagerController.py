@@ -84,6 +84,8 @@ class PassManagerController(PassManagerScene.Ui_MainWindow):
             global key
             self.get_key()
 
+            # encrypt = Encryptor("AES", key)
+
             encrypt_key = Encryptor.adjust_key_length("AES", key)
             print("key ", key, " encrypt_key ", encrypt_key)
             key64 = base64.b64encode(encrypt_key).decode()

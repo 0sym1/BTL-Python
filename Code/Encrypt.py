@@ -1,6 +1,8 @@
 from Cryptodome.Cipher import AES, DES3, Blowfish
 from Cryptodome.Random import get_random_bytes
 import base64
+import random
+import string
 
 class Encryptor:
     def __init__(self, algo, key=None):
@@ -54,3 +56,18 @@ class Encryptor:
             return f"Mã hóa file thành công: {save_path}"
         except Exception as e:
             return f"Lỗi mã hóa file: {str(e)}"
+        
+    def adjust_key_length(algo, key):
+        """Điều chỉnh độ dài khóa theo thuật toán"""
+        key_bytes = key.encode()  # Chuyển chuỗi thành byte
+        required_lengths = {"AES": 32, "3DES": 24, "Blowfish": 16}  # Độ dài yêu cầu (byte)
+        required_length = required_lengths[algo]
+
+        if len(key_bytes) < required_length:
+            # Nếu ngắn hơn, thêm byte 0 vào cuối (padding)
+            key_bytes = key_bytes + b'\x00' * (required_length - len(key_bytes))
+        elif len(key_bytes) > required_length:
+            # Nếu dài hơn, cắt bớt từ đầu
+            key_bytes = key_bytes[:required_length]
+
+        return key_bytes

@@ -9,7 +9,7 @@ ui = ''
 app = QApplication(sys.argv)
 window = ''
 
-
+confirm_pass = 0
 ############################################
 
 
@@ -51,13 +51,18 @@ class ChangePasswordController(ChangePasswordScene.Ui_MainWindow):
         
         AIpass = AIPass()
         classifier = AIpass.classifier_pass(self.new_pass_line.text())
+        global confirm_pass
         if(classifier == 0):
-            self.notice_label.setText("Password is too weak")
-            return
+            if(confirm_pass == 0):
+                self.notice_label.setText("Password is weak, are you confirm?")
+                confirm_pass = 1
+                return
         
         if(classifier == 1):
-            self.notice_label.setText("Password is weak")
-            return
+            if(confirm_pass == 0):
+                self.notice_label.setText("Password is normal, are you confirm?")
+                confirm_pass = 1
+                return
         
         hash_pass = HashData.hasing(self.new_pass_line.text())
         
@@ -65,10 +70,11 @@ class ChangePasswordController(ChangePasswordScene.Ui_MainWindow):
             files.write(f"Password: {hash_pass}\n")
             files.write(f"Email: {lines[1].strip().split(':')[1].strip()}\n")
 
-        self.notice_label.setText("Password is strong! Change password successfully")
+        self.notice_label.setText("Change password successfully")
         self.current_pass_line.setText("")
         self.new_pass_line.setText("")
         self.cf_new_pass_line.setText("")
+        confirm_pass = 0
         
 
     def on_back_button_click(self):

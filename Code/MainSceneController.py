@@ -68,3 +68,4 @@ if __name__ == "__main__":
 #         self.tableWidget.setColumnWidth(1, 160)  # Cột "Username"
 #         self.tableWidget.setColumnWidth(2, 130)  # Cột "Password"
 #         self.tableWidget.setColumnWidth(3, 120)  # Cột "Date"
+

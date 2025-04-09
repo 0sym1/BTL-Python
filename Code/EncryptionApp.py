@@ -3,8 +3,10 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QL
 import base64
 import random
 import string
-from Code.Encrypt import Encryptor
-from Code.Decrypt import Decryptor
+# from Code.Encrypt import Encryptor
+# from Code.Decrypt import Decryptor
+from Encrypt import Encryptor
+from Decrypt import Decryptor
 
 class EncryptionApp(QWidget):
     def __init__(self):

@@ -12,6 +12,7 @@ app = QApplication(sys.argv)
 window = ''
 
 key = ''
+confirm_pass = 0
 
 ############################################
 
@@ -49,20 +50,26 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
         
         AIpass = AIPass()
         classifier = AIpass.classifier_pass(self.password_lineEdit.text())
+        global confirm_pass
         if(classifier == 0):
-            self.notice1_label.setText("Password is too weak")
-            return
+            if(confirm_pass == 0):
+                self.notice1_label.setText("Password is weak, are you confirm?")
+                confirm_pass = 1
+                return
         
         if(classifier == 1):
-            self.notice1_label.setText("Password is weak")
-            return
+            if(confirm_pass == 0):
+                self.notice1_label.setText("Password is normal, are you confirm?")
+                confirm_pass = 1
+                return
         
         global key
+        # ecrypt = Encryptor("AES", key)
         encrypt_key = Encryptor.adjust_key_length("AES", key)
         encryptor = Encryptor("AES", encrypt_key)
         encrypt_pass = encryptor.encrypt_text(self.password_lineEdit.text())
         
-        with open("Data/data_accounts", "w", encoding="utf-8") as files:
+        with open("Data/data_accounts", "a", encoding="utf-8") as files:
             files.write(self.account_lineEdit.text() + " | " + self.username_lineEdit.text() + " | " + encrypt_pass + " | " + datetime.today().strftime("%d/%m/%Y") + "\n")
         files.close()
         self.account_lineEdit.setText("")
@@ -71,6 +78,7 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
 
         self.notice1_label.setText("Add account successfully")
         self.update_data_account.emit()
+        confirm_pass = 0
 
     def on_edit_account_button_click(self):
         if(self.check_fill_input() == False):
@@ -83,13 +91,18 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
         
         AIpass = AIPass()
         classifier = AIpass.classifier_pass(self.password_lineEdit.text())
+        global confirm_pass
         if(classifier == 0):
-            self.notice1_label.setText("Password is too weak")
-            return
+            if(confirm_pass == 0):
+                self.notice1_label.setText("Password is weak, are you confirm?")
+                confirm_pass = 1
+                return
         
         if(classifier == 1):
-            self.notice1_label.setText("Password is weak")
-            return
+            if(confirm_pass == 0):
+                self.notice1_label.setText("Password is normal, are you confirm?")
+                confirm_pass = 1
+                return
         
         line = []
         
@@ -113,6 +126,7 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
         self.account_lineEdit.setText("")
         self.username_lineEdit.setText("")
         self.password_lineEdit.setText("")
+        confirm_pass = 0
 
         self.notice1_label.setText("Edit account successfully")
         self.update_data_account.emit()

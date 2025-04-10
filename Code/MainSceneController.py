@@ -39,7 +39,7 @@ class MyApp(QMainWindow, MainScene.Ui_MainWindow):
         self.window2.show()
 
     def on_Encrypt_button_click(self):
-        self.window2 = EncryptionApp()
+        self.window2 = EncryptionApp(main_screen=self)
         window.hide()
         self.window2.show()
 

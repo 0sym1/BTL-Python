@@ -69,5 +69,4 @@ class Encryptor:
         elif len(key_bytes) > required_length:
             # Nếu dài hơn, cắt bớt từ đầu
             key_bytes = key_bytes[:required_length]
-
         return key_bytes

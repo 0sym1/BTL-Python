@@ -64,23 +64,32 @@ class EncryptionApp(QWidget):
             self.main_screen.show()  # Hiển thị lại màn hình chính (MyApp)
         self.hide()  # Ẩn màn hình hiện tại (EncryptionApp)
 
+    # def adjust_key_length(self, algo, key):
+    #     key_bytes = key.encode('utf-8')
+    #     required_lengths = {"AES": 32, "3DES": 24, "Blowfish": 16}
+    #     required_length = required_lengths[algo]
+
+    #     if len(key_bytes) < required_length:
+    #         missing_length = required_length - len(key_bytes)
+    #         random_chars = ''.join(random.choices(string.ascii_letters + string.digits, k=missing_length))
+    #         adjusted_key = key + random_chars
+    #         adjusted_key_bytes = adjusted_key.encode('utf-8')
+    #         self.key_input.setText(adjusted_key)
+    #         return adjusted_key_bytes
+    #     elif len(key_bytes) > required_length:
+    #         adjusted_key_bytes = key_bytes[:required_length]
+    #         adjusted_key = adjusted_key_bytes.decode('utf-8', errors='ignore')
+    #         self.key_input.setText(adjusted_key)
+    #         return adjusted_key_bytes
+    #     return key_bytes
     def adjust_key_length(self, algo, key):
-        key_bytes = key.encode('utf-8')
+        key_bytes = key.encode('utf-8')  # Hỗ trợ ký tự tiếng Việt
         required_lengths = {"AES": 32, "3DES": 24, "Blowfish": 16}
         required_length = required_lengths[algo]
-
         if len(key_bytes) < required_length:
-            missing_length = required_length - len(key_bytes)
-            random_chars = ''.join(random.choices(string.ascii_letters + string.digits, k=missing_length))
-            adjusted_key = key + random_chars
-            adjusted_key_bytes = adjusted_key.encode('utf-8')
-            self.key_input.setText(adjusted_key)
-            return adjusted_key_bytes
+            key_bytes = key_bytes + b'\x00' * (required_length - len(key_bytes))
         elif len(key_bytes) > required_length:
-            adjusted_key_bytes = key_bytes[:required_length]
-            adjusted_key = adjusted_key_bytes.decode('utf-8', errors='ignore')
-            self.key_input.setText(adjusted_key)
-            return adjusted_key_bytes
+            key_bytes = key_bytes[:required_length]
         return key_bytes
 
     def encrypt_text(self):

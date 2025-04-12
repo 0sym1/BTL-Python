@@ -67,6 +67,7 @@ class EncryptionApp(QWidget):
             adjusted_key = key + random_chars
             adjusted_key_bytes = adjusted_key.encode('utf-8')
             self.key_input.setText(adjusted_key)
+            print(f"Khóa đã điều chỉnh: {adjusted_key}")
             return adjusted_key_bytes
         elif len(key_bytes) > required_length:
             # Cắt theo byte
@@ -95,6 +96,7 @@ class EncryptionApp(QWidget):
         encrypted_text = self.text_input.toPlainText().strip()
         algo = self.combo.currentText()
         key = self.key_input.text().strip()
+        print(f"Key: {key}")
 
         if not key:
             self.result.setText("Vui lòng nhập khóa giải mã.")

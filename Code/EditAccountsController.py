@@ -5,6 +5,7 @@ from PyQt6.QtCore import pyqtSignal
 import EditAccountsScene
 from Encrypt import Encryptor
 from AI.AIPass import AIPass
+from GenPass import GenPass
 
 ############################################
 ui = ''
@@ -33,7 +34,34 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
         self.back_button.clicked.connect(self.on_back_button_click)
         self.add_account_button.clicked.connect(self.on_add_account_button_click)
         self.edit_account_button.clicked.connect(self.on_edit_account_button_click)
+        self.remove_account_button.clicked.connect(self.on_remove_account_button_click)
+        self.gen_pass_button.clicked.connect(self.on_generate_password_button_click)
+
+
+    def on_generate_password_button_click(self):
+        pass_gen = GenPass.generate_strong_password()
+        self.password_lineEdit.setText(pass_gen)
+
+    def on_remove_account_button_click(self):
+        name_account = self.rm_account_lineEdit.text()
+        if(self.check_account_exist_2(name_account) == False):
+            self.notice1_label.setText("Account does not exist")
+            return
         
+        with open("Data/data_accounts", "r", encoding="utf-8") as files:
+            lines = files.readlines()
+        files.close()
+
+        with open("Data/data_accounts", "w", encoding="utf-8") as files:
+            for line in lines:
+                arr_line = line.strip().split("|")
+                if(arr_line[0].strip() != name_account):
+                    files.write(line)
+
+        self.notice1_label.setText("Remove account successfully")
+        self.update_data_account.emit()
+
+
 
     def on_back_button_click(self):
         self.scene_back.show()
@@ -48,20 +76,20 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
             self.notice1_label.setText("Account already exist")
             return
         
-        AIpass = AIPass()
-        classifier = AIpass.classifier_pass(self.password_lineEdit.text())
-        global confirm_pass
-        if(classifier == 0):
-            if(confirm_pass == 0):
-                self.notice1_label.setText("Password is weak, are you confirm?")
-                confirm_pass = 1
-                return
+        # AIpass = AIPass()
+        # classifier = AIpass.classifier_pass(self.password_lineEdit.text())
+        # global confirm_pass
+        # if(classifier == 0):
+        #     if(confirm_pass == 0):
+        #         self.notice1_label.setText("Password is weak, are you confirm?")
+        #         confirm_pass = 1
+        #         return
         
-        if(classifier == 1):
-            if(confirm_pass == 0):
-                self.notice1_label.setText("Password is normal, are you confirm?")
-                confirm_pass = 1
-                return
+        # if(classifier == 1):
+        #     if(confirm_pass == 0):
+        #         self.notice1_label.setText("Password is normal, are you confirm?")
+        #         confirm_pass = 1
+        #         return
         
         global key
         # ecrypt = Encryptor("AES", key)
@@ -89,20 +117,20 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
             self.notice1_label.setText("Account does not exist")
             return
         
-        AIpass = AIPass()
-        classifier = AIpass.classifier_pass(self.password_lineEdit.text())
-        global confirm_pass
-        if(classifier == 0):
-            if(confirm_pass == 0):
-                self.notice1_label.setText("Password is weak, are you confirm?")
-                confirm_pass = 1
-                return
+        # AIpass = AIPass()
+        # classifier = AIpass.classifier_pass(self.password_lineEdit.text())
+        # global confirm_pass
+        # if(classifier == 0):
+        #     if(confirm_pass == 0):
+        #         self.notice1_label.setText("Password is weak, are you confirm?")
+        #         confirm_pass = 1
+        #         return
         
-        if(classifier == 1):
-            if(confirm_pass == 0):
-                self.notice1_label.setText("Password is normal, are you confirm?")
-                confirm_pass = 1
-                return
+        # if(classifier == 1):
+        #     if(confirm_pass == 0):
+        #         self.notice1_label.setText("Password is normal, are you confirm?")
+        #         confirm_pass = 1
+        #         return
         
         line = []
         
@@ -144,6 +172,15 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
             for line in lines:
                 arr_line = line.strip().split("|")
                 if(arr_line[0].strip() == self.account_lineEdit.text()):
+                    return True
+        return False
+    
+    def check_account_exist_2(self, name_account):
+        with open("Data/data_accounts", "r", encoding="utf-8") as files:
+            lines = files.readlines()
+            for line in lines:
+                arr_line = line.strip().split("|")
+                if(arr_line[0].strip() == name_account):
                     return True
         return False
     

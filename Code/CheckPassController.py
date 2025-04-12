@@ -6,6 +6,7 @@ import TwoFactorAuth
 from HashData import HashData
 from Encrypt import Encryptor
 
+
 ############################################
 ui = ''
 app = QApplication(sys.argv)

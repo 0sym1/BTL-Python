@@ -3,18 +3,22 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QL
 import base64
 import random
 import string
-# from Code.Encrypt import Encryptor
-# from Code.Decrypt import Decryptor
 from Encrypt import Encryptor
 from Decrypt import Decryptor
 
 class EncryptionApp(QWidget):
-    def __init__(self):
+    def __init__(self, main_screen=None):
         super().__init__()
+        self.main_screen = main_screen  # Lưu tham chiếu đến MyApp (màn hình chính)
         self.initUI()
 
     def initUI(self):
         layout = QVBoxLayout()
+
+        # Nút Back
+        self.btn_back = QPushButton("Quay lại")
+        self.btn_back.clicked.connect(self.go_back)
+        layout.addWidget(self.btn_back)
 
         self.label = QLabel("Chọn thuật toán:")
         layout.addWidget(self.label)
@@ -55,26 +59,37 @@ class EncryptionApp(QWidget):
         self.setWindowTitle("Ứng dụng Mã hóa")
         self.resize(800, 600)
 
+    def go_back(self):
+        if self.main_screen:
+            self.main_screen.show()  # Hiển thị lại màn hình chính (MyApp)
+        self.hide()  # Ẩn màn hình hiện tại (EncryptionApp)
+
+    # def adjust_key_length(self, algo, key):
+    #     key_bytes = key.encode('utf-8')
+    #     required_lengths = {"AES": 32, "3DES": 24, "Blowfish": 16}
+    #     required_length = required_lengths[algo]
+
+    #     if len(key_bytes) < required_length:
+    #         missing_length = required_length - len(key_bytes)
+    #         random_chars = ''.join(random.choices(string.ascii_letters + string.digits, k=missing_length))
+    #         adjusted_key = key + random_chars
+    #         adjusted_key_bytes = adjusted_key.encode('utf-8')
+    #         self.key_input.setText(adjusted_key)
+    #         return adjusted_key_bytes
+    #     elif len(key_bytes) > required_length:
+    #         adjusted_key_bytes = key_bytes[:required_length]
+    #         adjusted_key = adjusted_key_bytes.decode('utf-8', errors='ignore')
+    #         self.key_input.setText(adjusted_key)
+    #         return adjusted_key_bytes
+    #     return key_bytes
     def adjust_key_length(self, algo, key):
-        key_bytes = key.encode('utf-8')
+        key_bytes = key.encode('utf-8')  # Hỗ trợ ký tự tiếng Việt
         required_lengths = {"AES": 32, "3DES": 24, "Blowfish": 16}
         required_length = required_lengths[algo]
-
         if len(key_bytes) < required_length:
-            # Thêm ký tự ngẫu nhiên dạng văn bản
-            missing_length = required_length - len(key_bytes)
-            random_chars = ''.join(random.choices(string.ascii_letters + string.digits, k=missing_length))
-            adjusted_key = key + random_chars
-            adjusted_key_bytes = adjusted_key.encode('utf-8')
-            self.key_input.setText(adjusted_key)
-            print(f"Khóa đã điều chỉnh: {adjusted_key}")
-            return adjusted_key_bytes
+            key_bytes = key_bytes + b'\x00' * (required_length - len(key_bytes))
         elif len(key_bytes) > required_length:
-            # Cắt theo byte
-            adjusted_key_bytes = key_bytes[:required_length]
-            adjusted_key = adjusted_key_bytes.decode('utf-8', errors='ignore')
-            self.key_input.setText(adjusted_key)
-            return adjusted_key_bytes
+            key_bytes = key_bytes[:required_length]
         return key_bytes
 
     def encrypt_text(self):

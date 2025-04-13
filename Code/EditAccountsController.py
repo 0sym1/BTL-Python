@@ -39,7 +39,12 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
 
 
     def on_generate_password_button_click(self):
-        pass_gen = GenPass.generate_strong_password()
+        lenght_pass = self.lenght_pass_LineEdit.text()
+        pass_gen = ''
+        if(lenght_pass == ''): 
+            pass_gen = GenPass.generate_strong_password()
+        else:
+            pass_gen = GenPass.generate_strong_password(int(lenght_pass))
         self.password_lineEdit.setText(pass_gen)
 
     def on_remove_account_button_click(self):

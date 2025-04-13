@@ -271,6 +271,16 @@
      <string>Generate Password</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="lenght_pass_LineEdit">
+    <property name="geometry">
+     <rect>
+      <x>1060</x>
+      <y>130</y>
+      <width>51</width>
+      <height>51</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

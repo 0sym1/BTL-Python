@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>1600</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="font">
@@ -23,10 +23,10 @@
    <widget class="QPushButton" name="Password_Manager_Button">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>70</y>
-      <width>191</width>
-      <height>51</height>
+      <x>600</x>
+      <y>230</y>
+      <width>381</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -41,10 +41,10 @@
    <widget class="QPushButton" name="Encrypt_Button">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>150</y>
-      <width>191</width>
-      <height>51</height>
+      <x>600</x>
+      <y>350</y>
+      <width>381</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -59,10 +59,10 @@
    <widget class="QPushButton" name="Secure_File_Deletion_Button">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>230</y>
-      <width>191</width>
-      <height>51</height>
+      <x>600</x>
+      <y>470</y>
+      <width>381</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -74,13 +74,34 @@
      <string>Secure File Deletion</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>50</y>
+      <width>471</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>24</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Data Encryption Application</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>1600</width>
      <height>18</height>
     </rect>
    </property>

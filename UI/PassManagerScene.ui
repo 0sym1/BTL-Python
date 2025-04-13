@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>1600</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,15 +17,15 @@
    <widget class="QPushButton" name="ChangePass_Button">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>40</y>
-      <width>141</width>
-      <height>51</height>
+      <x>300</x>
+      <y>130</y>
+      <width>261</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -35,15 +35,15 @@
    <widget class="QPushButton" name="ChangeMail_Button">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>40</y>
-      <width>141</width>
-      <height>51</height>
+      <x>650</x>
+      <y>130</y>
+      <width>261</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -53,28 +53,28 @@
    <widget class="QPushButton" name="AddAcount_Button">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>40</y>
-      <width>141</width>
-      <height>51</height>
+      <x>1000</x>
+      <y>130</y>
+      <width>261</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>Add acocunt</string>
+     <string>Edit acocunt</string>
     </property>
    </widget>
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>111</y>
-      <width>561</width>
-      <height>251</height>
+      <x>60</x>
+      <y>260</y>
+      <width>1481</width>
+      <height>471</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -124,12 +124,38 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>56</width>
-      <height>17</height>
+      <width>101</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Back</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>30</y>
+      <width>411</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>25</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Password Manager</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
@@ -138,7 +164,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>1600</width>
      <height>18</height>
     </rect>
    </property>

@@ -1,5 +1,4 @@
 import sys
-import os
 from PyQt6.QtWidgets import QApplication, QMainWindow
 import MainScene, CheckPassScene, PassManagerScene
 from CheckPassController import CheckPassController
@@ -7,20 +6,15 @@ from PassManagerController import PassManagerController
 from EncryptionApp import EncryptionApp
 from del_file import MainWindowDelFile
 
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-############################################
-ui = ''
-app = QApplication(sys.argv)
-window = ''
-
-############################################
+# Biến toàn cục
+window = None
 
 
 class MyApp(QMainWindow, MainScene.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
+        self.apply_styles()
         MyApp.listener(self)
 
     def listener(self):
@@ -28,48 +22,69 @@ class MyApp(QMainWindow, MainScene.Ui_MainWindow):
         self.Encrypt_Button.clicked.connect(self.on_Encrypt_button_click)
         self.Secure_File_Deletion_Button.clicked.connect(self.on_SecureFile_button_click)
 
-    def on_PassManager_button_click(self):
-        # ui = CheckPassScene.Ui_MainWindow()
-        # ui.setupUi(window)
-        # window.show()
+    def apply_styles(self):
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #1e1e2f;
+                font-family: 'Segoe UI', sans-serif;
+                color: #f0f0f0;
+                font-size: 16px;
+            }
 
-        # self.window2 = CheckPassScene.Ui_MainWindow()
+            QLabel {
+                font-size: 28px;
+                font-weight: 600;
+                color: #f8f8f8;
+            }
+
+            QPushButton {
+                background-color: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 0,
+                    stop: 0 #4e54c8, stop: 1 #8f94fb
+                );
+                border: none;
+                border-radius: 12px;
+                padding: 12px;
+                color: white;
+                font-weight: bold;
+                font-size: 16px;
+            }
+
+            QPushButton:hover {
+                background-color: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 0,
+                    stop: 0 #5a60d1, stop: 1 #9ca1fd
+                );
+            }
+
+            QPushButton:pressed {
+                background-color: #3b3f87;
+            }
+        """)
+
+    def on_PassManager_button_click(self):
         self.window2 = CheckPassController()
         self.window2.login_successful.connect(self.go_to_pass_manager_scene)
         self.window2.show()
 
     def on_Encrypt_button_click(self):
         self.window2 = EncryptionApp(main_screen=self)
-        window.hide()
+        self.hide()
         self.window2.show()
 
     def on_SecureFile_button_click(self):
         self.window2 = MainWindowDelFile()
-        window.hide()
+        self.hide()
         self.window2.show()
 
     def go_to_pass_manager_scene(self):
-        # ui =  PassManagerScene.Ui_MainWindow()
-        # ui.setupUi(window)
-
-        # window = PassManagerController(self)
-        # window.show()
-
         self.window2 = PassManagerController(self)
-        window.hide()
+        self.hide()
         self.window2.show()
-        
 
 
 if __name__ == "__main__":
-    # app = QApplication(sys.argv)
+    app = QApplication(sys.argv)
     window = MyApp()
     window.show()
     sys.exit(app.exec())
-
-
-# self.tableWidget.setColumnWidth(0, 168)  # Cột "Account"
-#         self.tableWidget.setColumnWidth(1, 160)  # Cột "Username"
-#         self.tableWidget.setColumnWidth(2, 130)  # Cột "Password"
-#         self.tableWidget.setColumnWidth(3, 120)  # Cột "Date"
-

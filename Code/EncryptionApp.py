@@ -35,12 +35,19 @@ class EncryptionApp(QWidget):
             QPushButton {
                 padding: 8px; 
                 font-size: 14px; 
-                background-color: #555; 
+                background-color: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 0,
+                    stop: 0 #B0BEC5, stop: 1 #555
+                );
                 color: white; 
+                border: none;
                 border-radius: 5px;
             }
             QPushButton:hover {
-                background-color: #777;
+                background-color: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 0,
+                    stop: 0 #CFD8DC, stop: 1 #78909C
+                );
             }
         """)
         header_layout.addWidget(self.btn_back)
@@ -65,7 +72,7 @@ class EncryptionApp(QWidget):
 
         self.combo = QComboBox()
         self.combo.addItems(["AES", "3DES", "Blowfish"])
-        self.combo.setStyleSheet("padding: 5px; font-size: 16px; color: #ffffff; background-color: #333; border: 1px solid #555; border-radius: 5px;font-weight: bold;")
+        self.combo.setStyleSheet("padding: 5px; font-size: 16px; color: #ffffff; background-color: #333; border: 1px solid #555; border-radius: 5px; font-weight: bold;")
         algo_layout.addWidget(self.combo)
         left_layout.addLayout(algo_layout)
 
@@ -82,7 +89,18 @@ class EncryptionApp(QWidget):
 
         self.btn_select_file = QPushButton("Chọn")
         self.btn_select_file.clicked.connect(self.select_file_for_suggestion)
-        self.btn_select_file.setStyleSheet("padding: 5px; font-size: 16px; background-color: #555; color: white; border-radius: 5px;")
+        self.btn_select_file.setStyleSheet("""
+            padding: 5px; 
+            font-size: 16px; 
+            background-color: qlineargradient(
+                x1: 0, y1: 0, x2: 1, y2: 0,
+                stop: 0 #B0BEC5, stop: 1 #555
+            );
+            color: white; 
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+        """)
         file_layout.addWidget(self.btn_select_file)
         left_layout.addLayout(file_layout)
 
@@ -93,7 +111,7 @@ class EncryptionApp(QWidget):
 
         self.sensitivity_combo = QComboBox()
         self.sensitivity_combo.addItems(["Thấp (0)", "Trung bình (1)", "Cao (2)"])
-        self.sensitivity_combo.setStyleSheet("padding: 5px; font-size: 16px; color: #ffffff; background-color: #333; border: 1px solid #555; border-radius: 5px;font-weight: bold;")
+        self.sensitivity_combo.setStyleSheet("padding: 5px; font-size: 16px; color: #ffffff; background-color: #333; border: 1px solid #555; border-radius: 5px; font-weight: bold;")
         sensitivity_layout.addWidget(self.sensitivity_combo)
         left_layout.addLayout(sensitivity_layout)
 
@@ -104,20 +122,42 @@ class EncryptionApp(QWidget):
 
         self.speed_combo = QComboBox()
         self.speed_combo.addItems(["Không (0)", "Có (1)"])
-        self.speed_combo.setStyleSheet("padding: 5px; font-size: 16px; color: #ffffff; background-color: #333; border: 1px solid #555; border-radius: 5px;font-weight: bold;")
+        self.speed_combo.setStyleSheet("padding: 5px; font-size: 16px; color: #ffffff; background-color: #333; border: 1px solid #555; border-radius: 5px; font-weight: bold;")
         speed_layout.addWidget(self.speed_combo)
         left_layout.addLayout(speed_layout)
 
         self.btn_suggest = QPushButton("Gợi ý thuật toán")
         self.btn_suggest.clicked.connect(self.suggest_algorithm)
         self.btn_suggest.setIcon(QIcon("icons/suggest.png"))
-        self.btn_suggest.setStyleSheet("padding: 10px; font-size: 16px; background-color: #FF9800; color: white; border-radius: 5px;")
+        self.btn_suggest.setStyleSheet("""
+            padding: 10px; 
+            font-size: 16px; 
+            background-color: qlineargradient(
+                x1: 0, y1: 0, x2: 1, y2: 0,
+                stop: 0 #4FC3F7, stop: 1 #0E7D92
+            );
+            color: white; 
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+        """)
         left_layout.addWidget(self.btn_suggest)
 
         self.btn_feedback = QPushButton("Phản hồi gợi ý")
         self.btn_feedback.clicked.connect(self.collect_feedback)
         self.btn_feedback.setIcon(QIcon("icons/feedback.png"))
-        self.btn_feedback.setStyleSheet("padding: 10px; font-size: 16px; background-color: #9C27B0; color: white; border-radius: 5px;")
+        self.btn_feedback.setStyleSheet("""
+            padding: 10px; 
+            font-size: 16px; 
+            background-color: qlineargradient(
+                x1: 0, y1: 0, x2: 1, y2: 0,
+                stop: 0 #CE93D8, stop: 1 #9C27B0
+            );
+            color: white; 
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+        """)
         left_layout.addWidget(self.btn_feedback)
 
         key_layout = QHBoxLayout()
@@ -148,25 +188,69 @@ class EncryptionApp(QWidget):
         self.btn_encrypt = QPushButton("Mã hóa Văn bản")
         self.btn_encrypt.clicked.connect(self.encrypt_text)
         self.btn_encrypt.setIcon(QIcon("icons/encrypt.png"))
-        self.btn_encrypt.setStyleSheet("padding: 20px; font-size: 20px; background-color: #4CAF50; color: white; border-radius: 5px;")
+        self.btn_encrypt.setStyleSheet("""
+            padding: 20px; 
+            font-size: 20px; 
+            background-color: qlineargradient(
+                x1: 0, y1: 0, x2: 1, y2: 0,
+                stop: 0 #A5D6A7, stop: 1 #4CAF50
+            );
+            color: white; 
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+        """)
         right_layout.addWidget(self.btn_encrypt)
 
         self.btn_decrypt = QPushButton("Giải mã Văn bản")
         self.btn_decrypt.clicked.connect(self.decrypt_text)
         self.btn_decrypt.setIcon(QIcon("icons/decrypt.png"))
-        self.btn_decrypt.setStyleSheet("padding: 20px; font-size: 20px; background-color: #2196F3; color: white; border-radius: 5px;")
+        self.btn_decrypt.setStyleSheet("""
+            padding: 20px; 
+            font-size: 20px; 
+            background-color: qlineargradient(
+                x1: 0, y1: 0, x2: 1, y2: 0,
+                stop: 0 #90CAF9, stop: 1 #2196F3
+            );
+            color: white; 
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+        """)
         right_layout.addWidget(self.btn_decrypt)
 
         self.btn_encrypt_file = QPushButton("Mã hóa File")
         self.btn_encrypt_file.clicked.connect(self.encrypt_file)
         self.btn_encrypt_file.setIcon(QIcon("icons/file_encrypt.png"))
-        self.btn_encrypt_file.setStyleSheet("padding: 20px; font-size: 20px; background-color: #4CAF50; color: white; border-radius: 5px;")
+        self.btn_encrypt_file.setStyleSheet("""
+            padding: 20px; 
+            font-size: 20px; 
+            background-color: qlineargradient(
+                x1: 0, y1: 0, x2: 1, y2: 0,
+                stop: 0 #A5D6A7, stop: 1 #4CAF50
+            );
+            color: white; 
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+        """)
         right_layout.addWidget(self.btn_encrypt_file)
 
         self.btn_decrypt_file = QPushButton("Giải mã File")
         self.btn_decrypt_file.clicked.connect(self.decrypt_file)
         self.btn_decrypt_file.setIcon(QIcon("icons/file_decrypt.png"))
-        self.btn_decrypt_file.setStyleSheet("padding: 20px; font-size: 20px; background-color: #2196F3; color: white; border-radius: 5px;")
+        self.btn_decrypt_file.setStyleSheet("""
+            padding: 20px; 
+            font-size: 20px; 
+            background-color: qlineargradient(
+                x1: 0, y1: 0, x2: 1, y2: 0,
+                stop: 0 #90CAF9, stop: 1 #2196F3
+            );
+            color: white; 
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+        """)
         right_layout.addWidget(self.btn_decrypt_file)
 
         content_layout.addLayout(right_layout)
@@ -185,7 +269,7 @@ class EncryptionApp(QWidget):
         self.setLayout(main_layout)
         self.setWindowTitle("Ứng dụng Mã hóa và Giải mã")
         self.resize(1600, 800)
-        self.setStyleSheet("background-color: #1E1E1E;")
+        self.setStyleSheet("background-color: #1e1e2f;")
         logging.info("UI setup completed")
 
     def go_back(self):

@@ -163,3 +163,24 @@
 2025-04-15 00:26:16,118 - INFO - UI setup completed
 2025-04-15 00:26:16,118 - INFO - EncryptionApp initialized
 2025-04-15 00:26:18,644 - INFO - Back button clicked
+2025-04-15 00:29:46,826 - INFO - UI setup completed
+2025-04-15 00:29:46,826 - INFO - EncryptionApp initialized
+2025-04-15 00:30:00,672 - INFO - Back button clicked
+2025-04-15 00:30:01,982 - INFO - UI setup completed
+2025-04-15 00:30:01,982 - INFO - EncryptionApp initialized
+2025-04-15 00:30:03,696 - INFO - Back button clicked
+2025-04-15 00:30:04,845 - INFO - UI setup completed
+2025-04-15 00:30:04,845 - INFO - EncryptionApp initialized
+2025-04-15 00:30:08,895 - INFO - Back button clicked
+2025-04-15 00:30:11,227 - INFO - UI setup completed
+2025-04-15 00:30:11,227 - INFO - EncryptionApp initialized
+2025-04-15 00:30:19,795 - INFO - Text encrypted successfully
+2025-04-15 00:30:29,774 - INFO - Text encrypted successfully
+2025-04-15 00:30:37,386 - INFO - Text decrypted successfully
+2025-04-15 00:30:41,768 - INFO - Text encrypted successfully
+2025-04-15 00:30:46,582 - INFO - Text decrypted successfully
+2025-04-15 00:31:09,847 - INFO - File encrypted: E:/masterpythonpj/BTL-Python/test.txt -> E:/masterpythonpj/BTL-Python/test12.txt.enc
+2025-04-15 00:31:17,440 - INFO - File decrypted: E:/masterpythonpj/BTL-Python/test12.txt.enc -> E:/masterpythonpj/BTL-Python/test12.txt
+2025-04-15 00:34:52,488 - INFO - UI setup completed
+2025-04-15 00:34:52,488 - INFO - EncryptionApp initialized
+2025-04-15 00:34:54,133 - INFO - Back button clicked

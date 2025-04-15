@@ -6,6 +6,7 @@ import EditAccountsScene
 from Encrypt import Encryptor
 from AI.AIPass import AIPass
 from GenPass import GenPass
+from Style import Style
 
 ############################################
 ui = ''
@@ -29,6 +30,7 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
         self.scene_back = scene_main
 
         self.get_key()
+        Style.apply_styles(self)
 
     def listener(self):
         self.back_button.clicked.connect(self.on_back_button_click)
@@ -81,20 +83,20 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
             self.notice1_label.setText("Account already exist")
             return
         
-        # AIpass = AIPass()
-        # classifier = AIpass.classifier_pass(self.password_lineEdit.text())
-        # global confirm_pass
-        # if(classifier == 0):
-        #     if(confirm_pass == 0):
-        #         self.notice1_label.setText("Password is weak, are you confirm?")
-        #         confirm_pass = 1
-        #         return
+        AIpass = AIPass()
+        classifier = AIpass.classifier_pass(self.password_lineEdit.text())
+        global confirm_pass
+        if(classifier == 0):
+            if(confirm_pass == 0):
+                self.notice1_label.setText("Password is weak, are you confirm?")
+                confirm_pass = 1
+                return
         
-        # if(classifier == 1):
-        #     if(confirm_pass == 0):
-        #         self.notice1_label.setText("Password is normal, are you confirm?")
-        #         confirm_pass = 1
-        #         return
+        if(classifier == 1):
+            if(confirm_pass == 0):
+                self.notice1_label.setText("Password is normal, are you confirm?")
+                confirm_pass = 1
+                return
         
         global key
         # ecrypt = Encryptor("AES", key)
@@ -122,20 +124,20 @@ class EditAccountsController(EditAccountsScene.Ui_MainWindow):
             self.notice1_label.setText("Account does not exist")
             return
         
-        # AIpass = AIPass()
-        # classifier = AIpass.classifier_pass(self.password_lineEdit.text())
-        # global confirm_pass
-        # if(classifier == 0):
-        #     if(confirm_pass == 0):
-        #         self.notice1_label.setText("Password is weak, are you confirm?")
-        #         confirm_pass = 1
-        #         return
+        AIpass = AIPass()
+        classifier = AIpass.classifier_pass(self.password_lineEdit.text())
+        global confirm_pass
+        if(classifier == 0):
+            if(confirm_pass == 0):
+                self.notice1_label.setText("Password is weak, are you confirm?")
+                confirm_pass = 1
+                return
         
-        # if(classifier == 1):
-        #     if(confirm_pass == 0):
-        #         self.notice1_label.setText("Password is normal, are you confirm?")
-        #         confirm_pass = 1
-        #         return
+        if(classifier == 1):
+            if(confirm_pass == 0):
+                self.notice1_label.setText("Password is normal, are you confirm?")
+                confirm_pass = 1
+                return
         
         line = []
         

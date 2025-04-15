@@ -2,6 +2,7 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 import ChangeEmailScene
 from EditAccountsController import EditAccountsController
+from Style import Style
 
 ############################################
 ui = ''
@@ -19,6 +20,7 @@ class ChangeEmailController(ChangeEmailScene.Ui_MainWindow):
 
         ChangeEmailController.listener(self)
         self.scene_main = scene_main
+        Style.apply_styles(self)
 
     def listener(self):
         self.cancel_button.clicked.connect(self.on_back_button_click)

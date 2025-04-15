@@ -7,6 +7,7 @@ from ChangeEmailController import ChangeEmailController
 from Decrypt import Decryptor
 from Encrypt import Encryptor
 import base64
+from Style import Style
 
 ############################################
 ui = ''
@@ -28,6 +29,7 @@ class PassManagerController(PassManagerScene.Ui_MainWindow):
         self.scene_main = scene_main
 
         self.get_key()
+        Style.apply_styles(self)
 
     def listener(self):
         self.Back_Button.clicked.connect(self.on_back_button_click)

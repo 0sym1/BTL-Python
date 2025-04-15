@@ -1,16 +1,16 @@
 2025-04-14 21:56:46,722 - INFO - UI setup completed
 2025-04-14 21:56:46,723 - INFO - EncryptionApp initialized
 2025-04-14 21:57:15,384 - INFO - File selected for suggestion: E:/masterpythonpj/BTL-Python/user.docx
-2025-04-14 21:58:06,193 - INFO - Algorithm suggested: AES, Reason: Vì file l\u1edbn, d\u1eef li\u1ec7u nh\u1ea1y c\u1ea3m, không yêu c\u1ea7u t\u1ed1c \u0111\u1ed9 cao.
+2025-04-14 21:58:06,193 - INFO - Algorithm suggested: AES, Reason: Vï¿½ file l\u1edbn, d\u1eef li\u1ec7u nh\u1ea1y c\u1ea3m, khï¿½ng yï¿½u c\u1ea7u t\u1ed1c \u0111\u1ed9 cao.
 2025-04-14 21:58:11,426 - INFO - collect_feedback started
 2025-04-14 21:58:11,427 - ERROR - Error in collect_feedback: type object 'QDialogButtonBox' has no attribute 'Ok'
-2025-04-14 21:58:51,131 - INFO - Algorithm suggested: 3DES, Reason: Vì \u0111\u1eb7c \u0111i\u1ec3m d\u1eef li\u1ec7u trung tính, nên ch\u1ecdn thu\u1eadt toán cân b\u1eb1ng nh\u01b0 3DES.
+2025-04-14 21:58:51,131 - INFO - Algorithm suggested: 3DES, Reason: Vï¿½ \u0111\u1eb7c \u0111i\u1ec3m d\u1eef li\u1ec7u trung tï¿½nh, nï¿½n ch\u1ecdn thu\u1eadt toï¿½n cï¿½n b\u1eb1ng nh\u01b0 3DES.
 2025-04-14 21:58:53,806 - INFO - collect_feedback started
 2025-04-14 21:58:53,807 - ERROR - Error in collect_feedback: type object 'QDialogButtonBox' has no attribute 'Ok'
 2025-04-14 22:03:48,869 - INFO - UI setup completed
 2025-04-14 22:03:48,870 - INFO - EncryptionApp initialized
 2025-04-14 22:03:58,616 - INFO - File selected for suggestion: E:/masterpythonpj/BTL-Python/test.txt
-2025-04-14 22:04:13,596 - INFO - Algorithm suggested: AES, Reason: Vì file l\u1edbn, d\u1eef li\u1ec7u nh\u1ea1y c\u1ea3m, không yêu c\u1ea7u t\u1ed1c \u0111\u1ed9 cao.
+2025-04-14 22:04:13,596 - INFO - Algorithm suggested: AES, Reason: Vï¿½ file l\u1edbn, d\u1eef li\u1ec7u nh\u1ea1y c\u1ea3m, khï¿½ng yï¿½u c\u1ea7u t\u1ed1c \u0111\u1ed9 cao.
 2025-04-14 22:04:14,503 - INFO - collect_feedback started
 2025-04-14 22:04:14,508 - INFO - Feedback dialog created
 2025-04-14 22:04:21,920 - ERROR - Error in collect_feedback: type object 'QDialog' has no attribute 'Accepted'
@@ -26,7 +26,7 @@
 2025-04-14 22:09:55,831 - INFO - UI setup completed
 2025-04-14 22:09:55,831 - INFO - EncryptionApp initialized
 2025-04-14 22:10:05,702 - INFO - File selected for suggestion: E:/masterpythonpj/BTL-Python/test.txt
-2025-04-14 22:10:18,879 - INFO - Algorithm suggested: 3DES, Reason: Vì \u0111\u1eb7c \u0111i\u1ec3m d\u1eef li\u1ec7u trung tính, nên ch\u1ecdn thu\u1eadt toán cân b\u1eb1ng nh\u01b0 3DES.
+2025-04-14 22:10:18,879 - INFO - Algorithm suggested: 3DES, Reason: Vï¿½ \u0111\u1eb7c \u0111i\u1ec3m d\u1eef li\u1ec7u trung tï¿½nh, nï¿½n ch\u1ecdn thu\u1eadt toï¿½n cï¿½n b\u1eb1ng nh\u01b0 3DES.
 2025-04-14 22:10:20,289 - INFO - collect_feedback started
 2025-04-14 22:10:20,291 - INFO - Feedback dialog created
 2025-04-14 22:10:23,734 - INFO - Feedback collected: {'size_mb': 4.863739013671875e-05, 'type': 0, 'sensitivity': 0, 'speed_priority': 1, 'chosen_algorithm': 'Blowfish'}
@@ -35,7 +35,7 @@
 2025-04-14 22:11:38,273 - INFO - Feedback dialog created
 2025-04-14 22:11:42,201 - INFO - Feedback dialog cancelled
 2025-04-14 22:11:49,915 - INFO - File selected for suggestion: E:/masterpythonpj/BTL-Python/user.docx
-2025-04-14 22:11:59,857 - INFO - Algorithm suggested: AES, Reason: Vì file l\u1edbn, d\u1eef li\u1ec7u nh\u1ea1y c\u1ea3m, không yêu c\u1ea7u t\u1ed1c \u0111\u1ed9 cao.
+2025-04-14 22:11:59,857 - INFO - Algorithm suggested: AES, Reason: Vï¿½ file l\u1edbn, d\u1eef li\u1ec7u nh\u1ea1y c\u1ea3m, khï¿½ng yï¿½u c\u1ea7u t\u1ed1c \u0111\u1ed9 cao.
 2025-04-14 22:12:01,229 - INFO - collect_feedback started
 2025-04-14 22:12:01,230 - INFO - Feedback dialog created
 2025-04-14 22:12:05,375 - INFO - Feedback collected: {'size_mb': 1.1371994018554688, 'type': 0, 'sensitivity': 2, 'speed_priority': 1, 'chosen_algorithm': '3DES'}
@@ -47,7 +47,7 @@
 2025-04-14 22:58:47,831 - INFO - UI setup completed
 2025-04-14 22:58:47,832 - INFO - EncryptionApp initialized
 2025-04-14 22:59:00,859 - INFO - File selected for suggestion: E:/masterpythonpj/BTL-Python/user.docx
-2025-04-14 22:59:15,202 - INFO - Algorithm suggested: AES, Reason: Vì file l\u1edbn, d\u1eef li\u1ec7u nh\u1ea1y c\u1ea3m, không yêu c\u1ea7u t\u1ed1c \u0111\u1ed9 cao.
+2025-04-14 22:59:15,202 - INFO - Algorithm suggested: AES, Reason: Vï¿½ file l\u1edbn, d\u1eef li\u1ec7u nh\u1ea1y c\u1ea3m, khï¿½ng yï¿½u c\u1ea7u t\u1ed1c \u0111\u1ed9 cao.
 2025-04-14 22:59:15,975 - INFO - collect_feedback started
 2025-04-14 22:59:15,977 - INFO - Feedback dialog created
 2025-04-14 22:59:21,769 - INFO - Feedback collected: {'size_mb': 1.1371994018554688, 'type': 0, 'sensitivity': 1, 'speed_priority': 0, 'chosen_algorithm': '3DES'}

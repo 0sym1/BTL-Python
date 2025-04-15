@@ -7,6 +7,7 @@ from Encrypt import Encryptor
 from Decrypt import Decryptor
 import base64
 from AI.AIPass import AIPass
+from Style import Style
 
 ############################################
 ui = ''
@@ -27,6 +28,8 @@ class ChangePasswordController(ChangePasswordScene.Ui_MainWindow):
 
         ChangePasswordController.listener(self)
         self.scene_main = scene_main
+
+        Style.apply_styles(self)
 
     def listener(self):
         self.Cancel_button.clicked.connect(self.on_back_button_click)
@@ -56,31 +59,26 @@ class ChangePasswordController(ChangePasswordScene.Ui_MainWindow):
             self.notice_label.setText("New password must be different from the current password")
             return
         
-        # AIpass = AIPass()
-        # classifier = AIpass.classifier_pass(self.new_pass_line.text())
-        # global confirm_pass
-        # if(classifier == 0):
-        #     if(confirm_pass == 0):
-        #         self.notice_label.setText("Password is weak, are you confirm?")
-        #         confirm_pass = 1
-        #         return
+        AIpass = AIPass()
+        classifier = AIpass.classifier_pass(self.new_pass_line.text())
+        global confirm_pass
+        if(classifier == 0):
+            if(confirm_pass == 0):
+                self.notice_label.setText("Password is weak, are you confirm?")
+                confirm_pass = 1
+                return
         
-        # if(classifier == 1):
-        #     if(confirm_pass == 0):
-        #         self.notice_label.setText("Password is normal, are you confirm?")
-        #         confirm_pass = 1
-        #         return
+        if(classifier == 1):
+            if(confirm_pass == 0):
+                self.notice_label.setText("Password is normal, are you confirm?")
+                confirm_pass = 1
+                return
         
         hash_pass = HashData.hasing(self.new_pass_line.text())
         
         with open("Data/data_account_manager", "w", encoding="utf-8") as files:
             files.write(f"Password: {hash_pass}\n")
             files.write(f"Email: {lines[1].strip().split(':')[1].strip()}\n")
-
-        # self.notice_label.setText("Change password successfully")
-        # self.current_pass_line.setText("")
-        # self.new_pass_line.setText("")
-        # self.cf_new_pass_line.setText("")
         
         self.load_pass()
         global key
@@ -121,12 +119,6 @@ class ChangePasswordController(ChangePasswordScene.Ui_MainWindow):
                 arr_line[2] = decryptor.decrypt_text(arr_line[2].strip())
                 list_password.append(arr_line[2])
                 print(len(list_password), arr_line[2])
-
-        # for passwd in list_password:
-
-        # with open("Data/data_accounts", "r", encoding="utf-8") as files:
-        #     lines = files.readlines()
-        # files.close()
 
         id = 0
 

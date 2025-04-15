@@ -82,9 +82,3 @@ def explain_recommendation(pred, size, sens, speed):
     else:
         return "Vì đặc điểm dữ liệu trung tính, nên chọn thuật toán cân bằng như 3DES."
 
-if __name__ == "__main__":
-    # Test thử
-    sample = (50, 2, 2, 0)
-    algo = recommend_algorithm(*sample)
-    print(f"🧠 Gợi ý thuật toán: {algo}")
-    print("📌 Giải thích:", explain_recommendation(algo, *sample))

@@ -346,8 +346,8 @@ class EncryptionApp(QWidget):
 
             self.combo.setCurrentText(suggested_algo)
             QMessageBox.information(self, "Gợi ý thuật toán",
-                                    f"Thuật toán được gợi ý: {suggested_algo}\nLý do: {explanation}")
-            logging.info(f"Algorithm suggested: {suggested_algo}, Reason: {explanation}")
+                                    f"Thuật toán được gợi ý: {suggested_algo}\n")
+            logging.info(f"Algorithm suggested: {suggested_algo}")
         except Exception as e:
             logging.error(f"Error in suggest_algorithm: {str(e)}")
             QMessageBox.critical(self, "Lỗi", f"Không thể gợi ý thuật toán: {str(e)}")

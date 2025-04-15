@@ -184,3 +184,21 @@
 2025-04-15 00:34:52,488 - INFO - UI setup completed
 2025-04-15 00:34:52,488 - INFO - EncryptionApp initialized
 2025-04-15 00:34:54,133 - INFO - Back button clicked
+2025-04-15 00:40:39,443 - INFO - UI setup completed
+2025-04-15 00:40:39,443 - INFO - EncryptionApp initialized
+2025-04-15 00:48:29,527 - INFO - UI setup completed
+2025-04-15 00:48:29,527 - INFO - EncryptionApp initialized
+2025-04-15 00:48:33,565 - INFO - Back button clicked
+2025-04-15 00:51:10,447 - INFO - UI setup completed
+2025-04-15 00:51:10,447 - INFO - EncryptionApp initialized
+2025-04-15 14:35:43,060 - INFO - UI setup completed
+2025-04-15 14:35:43,061 - INFO - EncryptionApp initialized
+2025-04-15 14:35:57,821 - INFO - File selected for suggestion: E:/masterpythonpj/BTL-Python/user.docx
+2025-04-15 14:36:09,364 - INFO - Algorithm suggested: 3DES
+2025-04-15 14:36:09,831 - INFO - collect_feedback started
+2025-04-15 14:36:09,836 - INFO - Feedback dialog created
+2025-04-15 14:36:13,033 - INFO - Feedback collected: {'size_mb': 1.1371994018554688, 'type': 0, 'sensitivity': 0, 'speed_priority': 1, 'chosen_algorithm': 'Blowfish'}
+2025-04-15 14:36:13,040 - INFO - Feedback saved to e:\masterpythonpj\BTL-Python\Code\user_feedback.csv
+2025-04-15 14:36:13,269 - INFO - Model retrained successfully
+2025-04-15 14:36:22,302 - INFO - Algorithm suggested: 3DES
+2025-04-15 14:36:26,511 - INFO - Back button clicked

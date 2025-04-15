@@ -1,9 +1,10 @@
-import sys
 import hashlib
 import os
 import shutil
+import sys
+
 from PyQt6 import QtWidgets, QtCore, QtGui
-from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLineEdit, QComboBox, QStackedWidget
+from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLineEdit, QStackedWidget
 
 
 class MainMenuWidget(QtWidgets.QWidget):
@@ -14,6 +15,8 @@ class MainMenuWidget(QtWidgets.QWidget):
 
     def setupUi(self):
         layout = QtWidgets.QVBoxLayout()
+
+        # layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         title = QtWidgets.QLabel("Xóa File An Toàn")
         title.setFont(QtGui.QFont("Arial", 20))
@@ -32,11 +35,18 @@ class MainMenuWidget(QtWidgets.QWidget):
         self.check_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(3))
         layout.addWidget(self.check_btn)
 
+        self.back_btn = QtWidgets.QPushButton("Back")
+        self.back_btn.clicked.connect(self.go_back)
+        layout.addWidget(self.back_btn)
+
         layout.addStretch()
         self.setLayout(layout)
+    def go_back(self):
+        self.stacked_widget.setCurrentIndex(0)
 
 
 class DeleteWidget(QtWidgets.QWidget):
+    
     def __init__(self, stacked_widget, passwords):
         super().__init__()
         self.stacked_widget = stacked_widget
@@ -52,7 +62,7 @@ class DeleteWidget(QtWidgets.QWidget):
         self.del_group.setFont(QtGui.QFont("Arial", 13))
         group_layout = QtWidgets.QVBoxLayout()
 
-        self.choose_file = QtWidgets.QPushButton("Chọn File")
+        self.choose_file = QtWidgets.QPushButton("🔍 Chọn File")
         self.choose_file.clicked.connect(self.select_file)
         group_layout.addWidget(self.choose_file)
 
@@ -71,7 +81,7 @@ class DeleteWidget(QtWidgets.QWidget):
         self.algorithm_label.setVisible(False)
         group_layout.addWidget(self.algorithm_label)
 
-        self.algorithm_combo = QComboBox()
+        self.algorithm_combo = QtWidgets.QComboBox()
         self.algorithm_combo.addItems(["Simple", "DoD 5220.22-M", "Gutmann"])
         self.algorithm_combo.setVisible(False)
         group_layout.addWidget(self.algorithm_combo)
@@ -80,7 +90,7 @@ class DeleteWidget(QtWidgets.QWidget):
         self.password_label.setVisible(False)
         group_layout.addWidget(self.password_label)
 
-        self.password_input = QLineEdit()
+        self.password_input = QtWidgets.QLineEdit()
         self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
         self.password_input.setVisible(False)
         group_layout.addWidget(self.password_input)
@@ -148,8 +158,8 @@ class DeleteWidget(QtWidgets.QWidget):
                 lambda: b'\xAA' * file_size,
                 lambda: b'\x92\x49\x24' * (file_size // 3 + 1),
                 lambda: b'\x49\x24\x92' * (file_size // 3 + 1),
-                lambda: b'\x24\x92\x49' * (file_size // 3 + 1),
-            ] + [lambda: os.urandom(file_size) for _ in range(31 - len(patterns))]
+                lambda: b'\x24\x92\x49' * (file_size // 3 + 1),]
+            patterns += [lambda: os.urandom(file_size) for _ in range(31 - len(patterns))]
             with open(file_path, "rb+") as f:
                 for pattern in patterns[:35]:
                     f.seek(0)
@@ -417,7 +427,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Xóa File An Toàn")
-        self.resize(800, 600)
+        self.resize(1600, 800)
 
         self.stacked_widget = QStackedWidget()
         self.setCentralWidget(self.stacked_widget)
@@ -437,6 +447,70 @@ class MainWindow(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+
+    app.setStyleSheet("""
+            QMainWindow {
+                background-color: qlineargradient(
+                    spread:pad, x1:0, y1:0, x2:1, y2:1,
+                    stop:0 rgba(240, 240, 240, 255),
+                    stop:1 rgba(200, 228, 238, 255)
+                );
+            }
+
+            QLabel {
+                font-size: 16px;
+                font-weight: bold;
+                color: #004d99; /* Màu xanh da trời đậm */
+            }
+
+            QPushButton {
+                background-color: #66b3ff; /* Màu xanh nhạt */
+                color: white;
+                border-radius: 10px;
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            QPushButton:hover {
+                background-color: #3399ff; /* Đổi màu khi hover */
+                color: #ffffff;
+            }
+
+            QPushButton:pressed {
+                background-color: #004d99; /* Đổi màu khi nhấn */
+                border: 1px solid #003366;
+            }
+
+            QGroupBox {
+                border: 2px solid #00509e;
+                border-radius: 5px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #00509e;
+            }
+
+            QRadioButton {
+                font-size: 14px;
+                color: #003366;
+            }
+
+            QLineEdit {
+                border: 1px solid #00509e;
+                border-radius: 5px;
+                padding: 5px;
+                font-size: 14px;
+            }
+
+            QLineEdit:focus {
+                border: 2px solid #3399ff;
+            }
+
+            QMessageBox QLabel {
+                font-size: 14px;
+                color: #003366;
+            }
+        """)
+
     window = MainWindow()
     window.show()
     sys.exit(app.exec())

@@ -12,13 +12,6 @@ EMAIL_PASSWORD = "uxgs xbre sxjy uvwo"  # App Password, không dùng mật khẩ
 
 otp = ''
 
-# Danh sách email đã đăng ký (giả sử bạn có một cơ sở dữ liệu)
-# registered_users = {
-#     "user": "kalyxianua000@gmail.com",
-# }
-
-# class TwoFactorAuth:
-
 # Tạo mã OTP
 def generate_otp():
     return str(random.randint(100000, 999999))  # Mã OTP 6 chữ số
@@ -43,29 +36,3 @@ def send_otp(email, otp):
     except Exception as e:
         print(f"Lỗi khi gửi email: {e}")
 
-# Quá trình đăng nhập với 2FA
-# def login(username):
-#     # Giả sử password luôn đúng để demo (cần kiểm tra password thực tế)
-#     if username in registered_users:
-#         global otp
-#         email = registered_users[username]
-#         otp = generate_otp()
-#         send_otp(email, otp)
-
-#         user_otp = input("Nhập mã OTP đã gửi qua email: ")
-#         if user_otp == otp:
-#             print("Xác thực thành công! Đăng nhập thành công.")
-#         else:
-#             print("Mã OTP không chính xác.")
-#     else:
-#         print("Người dùng không tồn tại.")
-
-
-# def GetOTP():
-#     return otp
-
-
-# Chạy chương trình
-# if __name__ == "__main__":
-#     username = input("Nhập tên đăng nhập: ")
-#     login(username, password)

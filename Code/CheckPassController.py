@@ -41,7 +41,7 @@ class CheckPassController(CheckPassScene.Ui_MainWindow):
         self.authentication_step = 1
 
         CheckPassController.listener(self)
-        Style.apply_styles_v2(self)
+        # Style.apply_styles_v2(self)
 
     def listener(self):
         self.pushButton.clicked.connect(self.on_button_click)

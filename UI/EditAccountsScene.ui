@@ -35,10 +35,10 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>170</y>
-      <width>111</width>
-      <height>21</height>
+      <x>290</x>
+      <y>160</y>
+      <width>211</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -93,10 +93,10 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>230</y>
-      <width>121</width>
-      <height>20</height>
+      <x>290</x>
+      <y>220</y>
+      <width>211</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -111,10 +111,10 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>290</y>
-      <width>131</width>
-      <height>21</height>
+      <x>290</x>
+      <y>280</y>
+      <width>211</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -165,10 +165,10 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>490</y>
-      <width>91</width>
-      <height>21</height>
+      <x>290</x>
+      <y>480</y>
+      <width>201</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -185,8 +185,8 @@
      <rect>
       <x>30</x>
       <y>20</y>
-      <width>71</width>
-      <height>21</height>
+      <width>101</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -256,9 +256,9 @@
    <widget class="QPushButton" name="gen_pass_button">
     <property name="geometry">
      <rect>
-      <x>900</x>
+      <x>870</x>
       <y>130</y>
-      <width>151</width>
+      <width>221</width>
       <height>51</height>
      </rect>
     </property>
@@ -274,7 +274,7 @@
    <widget class="QLineEdit" name="lenght_pass_LineEdit">
     <property name="geometry">
      <rect>
-      <x>1060</x>
+      <x>1120</x>
       <y>130</y>
       <width>51</width>
       <height>51</height>

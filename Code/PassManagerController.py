@@ -106,57 +106,6 @@ class PassManagerController(PassManagerScene.Ui_MainWindow):
                 for col, value in enumerate(arr_line):
                     self.tableWidget.setItem(row, col, QTableWidgetItem(value.strip()))
 
-    def load_pass(self):
-        global list_password
-        global key
-        self.get_key()
-        with open("Data/data_accounts", "r", encoding="utf-8") as files:
-            lines = files.readlines()
-
-            encrypt_key = Encryptor.adjust_key_length("AES", key)
-            key64 = base64.b64encode(encrypt_key).decode()
-            decryptor = Decryptor("AES", key64)
-
-            for row, line in enumerate(lines):
-                arr_line = line.strip().split("|")
-                if(len(arr_line) <= 1): continue
-                arr_line[2] = decryptor.decrypt_text(arr_line[2].strip())
-                list_password.append(arr_line[2])
-
-        # for passwd in list_password:
-
-        # with open("Data/data_accounts", "r", encoding="utf-8") as files:
-        #     lines = files.readlines()
-        # files.close()
-
-        id = 0
-
-        with open("Data/data_accounts", "w", encoding="utf-8") as files:
-            for line in lines:
-                arr_line = line.strip().split("|")
-                files.write(arr_line[0] + " | " + arr_line[1] + " | " + list_password[id] + " | " + arr_line[3] + "\n")
-                id+= 1
-
-    def encrypt_pass(self):
-        global key
-        self.get_key()
-
-        with open("Data/data_accounts", "r", encoding="utf-8") as files:
-            lines = files.readlines()
-        files.close()
-
-        encrypt_key = Encryptor.adjust_key_length("AES", key)
-        encryptor = Encryptor("AES", encrypt_key)
-        encrypt_pass = encryptor.encrypt_text(self.password_lineEdit.text())
-
-        with open("Data/data_accounts", "w", encoding="utf-8") as files:
-            for line in lines:
-                arr_line = line.strip().split("|")
-                encrypt_pass = Encryptor.encrypt_text(arr_line[2].strip())
-                files.write(arr_line[0] + " | " + arr_line[1] + " | " + encrypt_pass + " | " + arr_line[3] + "\n")
-
-            
-                
 
     def get_key(self):
         global key

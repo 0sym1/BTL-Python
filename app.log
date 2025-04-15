@@ -202,3 +202,55 @@
 2025-04-15 14:36:13,269 - INFO - Model retrained successfully
 2025-04-15 14:36:22,302 - INFO - Algorithm suggested: 3DES
 2025-04-15 14:36:26,511 - INFO - Back button clicked
+2025-04-15 16:03:58,944 - INFO - UI setup completed
+2025-04-15 16:03:58,945 - INFO - EncryptionApp initialized
+2025-04-15 16:04:17,454 - INFO - Back button clicked
+2025-04-15 21:39:14,182 - INFO - UI setup completed
+2025-04-15 21:39:14,183 - INFO - EncryptionApp initialized
+2025-04-15 21:39:22,743 - INFO - File selected for suggestion: E:/masterpythonpj/BTL-Python/user.docx
+2025-04-15 21:39:48,696 - INFO - Algorithm suggested: AES
+2025-04-15 21:39:49,838 - INFO - collect_feedback started
+2025-04-15 21:39:49,842 - INFO - Feedback dialog created
+2025-04-15 21:40:07,067 - INFO - Feedback collected: {'size_mb': 1.1371994018554688, 'type': 0, 'sensitivity': 2, 'speed_priority': 0, 'chosen_algorithm': 'Blowfish'}
+2025-04-15 21:40:07,080 - INFO - Feedback saved to e:\masterpythonpj\BTL-Python\Code\user_feedback.csv
+2025-04-15 21:40:07,480 - INFO - Model retrained successfully
+2025-04-15 21:46:18,709 - INFO - Back button clicked
+2025-04-15 22:08:28,767 - INFO - UI setup completed
+2025-04-15 22:08:28,768 - INFO - EncryptionApp initialized
+2025-04-15 22:08:34,498 - INFO - Back button clicked
+2025-04-15 22:19:29,480 - INFO - UI setup completed
+2025-04-15 22:19:29,480 - INFO - EncryptionApp initialized
+2025-04-15 22:19:31,474 - INFO - Back button clicked
+2025-04-15 22:35:21,850 - INFO - UI setup completed
+2025-04-15 22:35:21,850 - INFO - EncryptionApp initialized
+2025-04-15 22:35:23,389 - INFO - Back button clicked
+2025-04-15 22:38:18,109 - INFO - UI setup completed
+2025-04-15 22:38:18,110 - INFO - EncryptionApp initialized
+2025-04-15 22:39:06,105 - INFO - Back button clicked
+2025-04-15 22:39:57,283 - INFO - UI setup completed
+2025-04-15 22:39:57,283 - INFO - EncryptionApp initialized
+2025-04-15 22:40:02,073 - INFO - Back button clicked
+2025-04-15 22:43:50,387 - INFO - UI setup completed
+2025-04-15 22:43:50,388 - INFO - EncryptionApp initialized
+2025-04-15 22:43:59,566 - INFO - File selected for suggestion: E:/masterpythonpj/BTL-Python/test.txt
+2025-04-15 22:44:17,060 - INFO - Algorithm suggested: AES
+2025-04-15 22:44:17,808 - INFO - collect_feedback started
+2025-04-15 22:44:17,810 - INFO - Feedback dialog created
+2025-04-15 22:44:23,066 - INFO - Feedback dialog cancelled
+2025-04-15 22:44:24,556 - INFO - collect_feedback started
+2025-04-15 22:44:24,558 - INFO - Feedback dialog created
+2025-04-15 22:44:28,284 - INFO - Feedback collected: {'size_mb': 4.863739013671875e-05, 'type': 0, 'sensitivity': 2, 'speed_priority': 1, 'chosen_algorithm': '3DES'}
+2025-04-15 22:44:28,290 - INFO - Feedback saved to e:\masterpythonpj\BTL-Python\Code\user_feedback.csv
+2025-04-15 22:44:28,762 - INFO - Model retrained successfully
+2025-04-15 22:45:00,487 - INFO - File encrypted: E:/masterpythonpj/BTL-Python/test.txt -> E:/masterpythonpj/BTL-Python/test.txt102.enc
+2025-04-15 22:45:12,449 - INFO - File decrypted: E:/masterpythonpj/BTL-Python/test.txt102.enc -> E:/masterpythonpj/BTL-Python/test.txt102
+2025-04-15 22:45:44,443 - INFO - Text encrypted successfully
+2025-04-15 22:45:52,904 - INFO - Text decrypted successfully
+2025-04-15 22:45:58,402 - INFO - Text encrypted successfully
+2025-04-15 22:46:04,769 - INFO - Text decrypted successfully
+2025-04-15 22:46:08,790 - INFO - Text encrypted successfully
+2025-04-15 22:46:14,403 - INFO - Text decrypted successfully
+2025-04-15 22:46:17,751 - INFO - Back button clicked
+2025-04-15 22:49:29,006 - INFO - UI setup completed
+2025-04-15 22:49:29,007 - INFO - EncryptionApp initialized
+2025-04-15 22:49:34,653 - INFO - Back button clicked

@@ -8,9 +8,10 @@ from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLineEdit, QStackedWidget
 
 
 class MainMenuWidget(QtWidgets.QWidget):
-    def __init__(self, stacked_widget):
+    def __init__(self, stacked_widget, main_screen = None):
         super().__init__()
         self.stacked_widget = stacked_widget
+        self.main_screen = main_screen
         self.setupUi()
 
     def setupUi(self):
@@ -41,9 +42,12 @@ class MainMenuWidget(QtWidgets.QWidget):
 
         layout.addStretch()
         self.setLayout(layout)
+    # def go_back(self):
+    #     self.stacked_widget.setCurrentIndex(0)
     def go_back(self):
-        self.stacked_widget.setCurrentIndex(0)
-
+        if self.main_screen:
+            self.main_screen.show()
+        self.hide()
 
 class DeleteWidget(QtWidgets.QWidget):
     
@@ -137,6 +141,7 @@ class DeleteWidget(QtWidgets.QWidget):
             self.password_input.setVisible(False)
 
     def secure_overwrite(self, file_path, method="simple"):
+
         file_size = os.path.getsize(file_path)
         if method == "simple":
             with open(file_path, "rb+") as f:
@@ -424,7 +429,7 @@ class CheckWidget(QtWidgets.QWidget):
 
 
 class MainWindowDelFile(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, main_screen=None):
         super().__init__()
         self.setWindowTitle("Xóa File An Toàn")
         self.resize(1600, 800)
@@ -433,8 +438,9 @@ class MainWindowDelFile(QtWidgets.QMainWindow):
         self.setCentralWidget(self.stacked_widget)
 
         self.passwords = {}
+        self.main_screen = main_screen
 
-        self.main_menu = MainMenuWidget(self.stacked_widget)
+        self.main_menu = MainMenuWidget(self.stacked_widget, self.main_screen)
         self.delete_widget = DeleteWidget(self.stacked_widget, self.passwords)
         self.restore_widget = RestoreWidget(self.stacked_widget, self.passwords)
         self.check_widget = CheckWidget(self.stacked_widget)
@@ -443,137 +449,66 @@ class MainWindowDelFile(QtWidgets.QMainWindow):
         self.stacked_widget.addWidget(self.delete_widget)
         self.stacked_widget.addWidget(self.restore_widget)
         self.stacked_widget.addWidget(self.check_widget)
-
         self.setStyleSheet("""
-            QMainWindow {
-                background-color: qlineargradient(
-                    spread:pad, x1:0, y1:0, x2:1, y2:1,
-                    stop:0 rgba(240, 240, 240, 255),
-                    stop:1 rgba(200, 228, 238, 255)
-                );
-            }
+        QMainWindow {
+            background-color: #1e1e2f; /* Màu nền chính */
+        }
+    
+        QLabel {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #5F4FFF, stop:1 #8871FF); /* Màu xanh tím */
+        }
+    
+        QPushButton {
+            background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #5F4FFF, stop:1 #8871FF); /* Màu xanh tím */
+            color: white; /* Chữ trắng */
+            border-radius: 10px;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+    
+        QPushButton:hover {
+            background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #5F4FFF, stop:1 #8871FF); /* Đổi màu xanh tím nhạt hơn khi hover */
+            color: white;
+        }
+    
+        QPushButton:pressed {
+            background-color: #39416b; /* Đổi màu xanh tím đậm hơn khi nhấn */
+            border: 1px solid #272b40;
+        }
+    
+        QGroupBox {
+            border: 2px solid #39416b; /* Đường viền xanh tím đậm */
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #6272a4; /* Màu xanh tím */
+        }
+    
+        QRadioButton {
+            font-size: 14px;
+            color: #6272a4; /* Màu xanh tím */
+        }
+    
+        QLineEdit {
+            border: 1px solid #39416b; /* Viền xanh tím đậm */
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 14px;
+            color: white; /* Chữ trắng */
+            background-color: #2d2f3f; /* Nền xanh tím tối */
+        }
+    
+        QLineEdit:focus {
+            border: 2px solid #7080c4; /* Viền xanh tím nhạt khi focus */
+        }
+    
+        QMessageBox QLabel {
+            font-size: 14px;
+            color: #6272a4; /* Màu xanh tím */
+        }
+    """)
 
-            QLabel {
-                font-size: 16px;
-                font-weight: bold;
-                color: #004d99; /* Màu xanh da trời đậm */
-            }
 
-            QPushButton {
-                background-color: #66b3ff; /* Màu xanh nhạt */
-                color: white;
-                border-radius: 10px;
-                font-size: 14px;
-                padding: 8px 16px;
-            }
-
-            QPushButton:hover {
-                background-color: #3399ff; /* Đổi màu khi hover */
-                color: #ffffff;
-            }
-
-            QPushButton:pressed {
-                background-color: #004d99; /* Đổi màu khi nhấn */
-                border: 1px solid #003366;
-            }
-
-            QGroupBox {
-                border: 2px solid #00509e;
-                border-radius: 5px;
-                font-size: 14px;
-                font-weight: bold;
-                color: #00509e;
-            }
-
-            QRadioButton {
-                font-size: 14px;
-                color: #003366;
-            }
-
-            QLineEdit {
-                border: 1px solid #00509e;
-                border-radius: 5px;
-                padding: 5px;
-                font-size: 14px;
-            }
-
-            QLineEdit:focus {
-                border: 2px solid #3399ff;
-            }
-
-            QMessageBox QLabel {
-                font-size: 14px;
-                color: #003366;
-            }
-        """)
-
-
-# if __name__ == "__main__":
-#     app = QtWidgets.QApplication(sys.argv)
-
-#     app.setStyleSheet("""
-#             QMainWindow {
-#                 background-color: qlineargradient(
-#                     spread:pad, x1:0, y1:0, x2:1, y2:1,
-#                     stop:0 rgba(240, 240, 240, 255),
-#                     stop:1 rgba(200, 228, 238, 255)
-#                 );
-#             }
-
-#             QLabel {
-#                 font-size: 16px;
-#                 font-weight: bold;
-#                 color: #004d99; /* Màu xanh da trời đậm */
-#             }
-
-#             QPushButton {
-#                 background-color: #66b3ff; /* Màu xanh nhạt */
-#                 color: white;
-#                 border-radius: 10px;
-#                 font-size: 14px;
-#                 padding: 8px 16px;
-#             }
-
-#             QPushButton:hover {
-#                 background-color: #3399ff; /* Đổi màu khi hover */
-#                 color: #ffffff;
-#             }
-
-#             QPushButton:pressed {
-#                 background-color: #004d99; /* Đổi màu khi nhấn */
-#                 border: 1px solid #003366;
-#             }
-
-#             QGroupBox {
-#                 border: 2px solid #00509e;
-#                 border-radius: 5px;
-#                 font-size: 14px;
-#                 font-weight: bold;
-#                 color: #00509e;
-#             }
-
-#             QRadioButton {
-#                 font-size: 14px;
-#                 color: #003366;
-#             }
-
-#             QLineEdit {
-#                 border: 1px solid #00509e;
-#                 border-radius: 5px;
-#                 padding: 5px;
-#                 font-size: 14px;
-#             }
-
-#             QLineEdit:focus {
-#                 border: 2px solid #3399ff;
-#             }
-
-#             QMessageBox QLabel {
-#                 font-size: 14px;
-#                 color: #003366;
-#             }
-#         """)
-
-#     window = MainWindowDelFile()
-#     window.show()
-#     sys.exit(app.exec())

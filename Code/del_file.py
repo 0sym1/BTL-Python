@@ -444,11 +444,7 @@ class MainWindowDelFile(QtWidgets.QMainWindow):
         self.stacked_widget.addWidget(self.restore_widget)
         self.stacked_widget.addWidget(self.check_widget)
 
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-
-    app.setStyleSheet("""
+        self.setStyleSheet("""
             QMainWindow {
                 background-color: qlineargradient(
                     spread:pad, x1:0, y1:0, x2:1, y2:1,
@@ -511,6 +507,73 @@ if __name__ == "__main__":
             }
         """)
 
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
+
+# if __name__ == "__main__":
+#     app = QtWidgets.QApplication(sys.argv)
+
+#     app.setStyleSheet("""
+#             QMainWindow {
+#                 background-color: qlineargradient(
+#                     spread:pad, x1:0, y1:0, x2:1, y2:1,
+#                     stop:0 rgba(240, 240, 240, 255),
+#                     stop:1 rgba(200, 228, 238, 255)
+#                 );
+#             }
+
+#             QLabel {
+#                 font-size: 16px;
+#                 font-weight: bold;
+#                 color: #004d99; /* Màu xanh da trời đậm */
+#             }
+
+#             QPushButton {
+#                 background-color: #66b3ff; /* Màu xanh nhạt */
+#                 color: white;
+#                 border-radius: 10px;
+#                 font-size: 14px;
+#                 padding: 8px 16px;
+#             }
+
+#             QPushButton:hover {
+#                 background-color: #3399ff; /* Đổi màu khi hover */
+#                 color: #ffffff;
+#             }
+
+#             QPushButton:pressed {
+#                 background-color: #004d99; /* Đổi màu khi nhấn */
+#                 border: 1px solid #003366;
+#             }
+
+#             QGroupBox {
+#                 border: 2px solid #00509e;
+#                 border-radius: 5px;
+#                 font-size: 14px;
+#                 font-weight: bold;
+#                 color: #00509e;
+#             }
+
+#             QRadioButton {
+#                 font-size: 14px;
+#                 color: #003366;
+#             }
+
+#             QLineEdit {
+#                 border: 1px solid #00509e;
+#                 border-radius: 5px;
+#                 padding: 5px;
+#                 font-size: 14px;
+#             }
+
+#             QLineEdit:focus {
+#                 border: 2px solid #3399ff;
+#             }
+
+#             QMessageBox QLabel {
+#                 font-size: 14px;
+#                 color: #003366;
+#             }
+#         """)
+
+#     window = MainWindowDelFile()
+#     window.show()
+#     sys.exit(app.exec())

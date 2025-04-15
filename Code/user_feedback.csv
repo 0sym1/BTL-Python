@@ -2,3 +2,4 @@ size_mb,type,sensitivity,speed_priority,chosen_algorithm
 4.863739013671875e-05,0,0,1,Blowfish
 1.1371994018554688,0,1,0,3DES
 1.1371994018554688,0,0,1,Blowfish
+1.1371994018554688,0,2,0,Blowfish

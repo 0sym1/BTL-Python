@@ -19,12 +19,15 @@ class MainMenuWidget(QtWidgets.QWidget):
     def setupUi(self):
         layout = QtWidgets.QVBoxLayout()
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)  # Căn giữa toàn bộ layout
+
         title = QtWidgets.QLabel("Xóa File An Toàn")
         title.setFont(QtGui.QFont("Arial", 24))  # Tăng kích thước font tiêu đề
         title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title)
+
     # Tạo khoảng cách giữa tiêu đề và các nút
         layout.addSpacing(20)
+
     # Căn chỉnh các nút với kích thước đồng đều
         button_style = """
             QPushButton {
@@ -43,21 +46,27 @@ class MainMenuWidget(QtWidgets.QWidget):
             background-color: #3b3f87;
             }
         """
+
         self.delete_btn = QtWidgets.QPushButton("Xóa File")
         self.delete_btn.setStyleSheet(button_style)
         self.delete_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
         layout.addWidget(self.delete_btn, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
+
+
         self.check_btn = QtWidgets.QPushButton("Kiểm tra File")
         self.check_btn.setStyleSheet(button_style)
-        self.check_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(3))
+        self.check_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
         layout.addWidget(self.check_btn, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
+
         self.back_btn = QtWidgets.QPushButton("Back")
         self.back_btn.setStyleSheet(button_style)
         self.back_btn.clicked.connect(self.go_back)
         layout.addWidget(self.back_btn, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
+
     # Thêm khoảng cách cuối cùng để căn giữa
         layout.addStretch()
         self.setLayout(layout)
+
     def go_back(self):
         if self.main_screen:
             self.main_screen.show()
@@ -117,6 +126,11 @@ class DeleteWidget(QtWidgets.QWidget):
         self.delete_perm_radio.toggled.connect(self.toggle_fields)
         group_layout.addWidget(self.delete_perm_radio, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
 
+    # Radio xóa có khôi phục
+        # self.delete_rec_radio = QtWidgets.QRadioButton("Xóa có khôi phục")
+        # self.delete_rec_radio.setFont(QtGui.QFont("Arial", 14))  # Tăng font size
+        # self.delete_rec_radio.toggled.connect(self.toggle_fields)
+        # group_layout.addWidget(self.delete_rec_radio, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
 
     # Thuật toán
         self.algorithm_label = QtWidgets.QLabel("Thuật toán:")
@@ -187,6 +201,7 @@ class DeleteWidget(QtWidgets.QWidget):
             self.file_path = file_name
             self.file_label.setText(file_name)
 
+    
     def toggle_fields(self):
         if self.delete_perm_radio.isChecked():
             self.algorithm_label.setVisible(True)
@@ -257,160 +272,6 @@ class DeleteWidget(QtWidgets.QWidget):
             QMessageBox.warning(self, "Lỗi", f"Không thể xóa file: {str(e)}")
 
 
-class RestoreWidget(QWidget):
-    def __init__(self, stacked_widget, passwords):
-        super().__init__()
-        self.stacked_widget = stacked_widget
-        self.passwords = passwords
-        self.restore_file_path = None
-        self.temp_dir = "temp_deleted_files"
-        self.setupUi()
-
-    def setupUi(self):
-        outer_layout = QVBoxLayout(self)
-        outer_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-
-        central_widget = QWidget()
-        central_layout = QVBoxLayout(central_widget)
-        central_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-
-    # Groupbox khôi phục file
-        self.restore_group = QGroupBox("Khôi phục file")
-        self.restore_group.setFont(QFont("Arial", 16))  # Tăng font size
-        self.restore_group.setFixedSize(600, 400)  # Tăng kích thước groupbox
-        self.restore_group.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-
-    # Layout chính cho group box
-        outer_group_layout = QVBoxLayout()
-        outer_group_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-
-    # Widget chứa nội dung và layout con
-        inner_widget = QWidget()
-        group_layout = QVBoxLayout(inner_widget)
-        group_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-
-    # Nhãn chọn file khôi phục
-        self.restore_file_label = QLabel("Hãy chọn file để khôi phục...")
-        self.restore_file_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.restore_file_label.setFont(QFont("Arial", 14))  # Tăng font size
-        group_layout.addWidget(self.restore_file_label)
-
-    # Nút chọn file
-        self.choose_restore_file = QtWidgets.QPushButton(" Chọn File")
-        self.choose_restore_file.setIcon(QIcon("icons/folder.png"))
-        self.choose_restore_file.setFixedWidth(250)  # Tăng chiều rộng nút
-        self.choose_restore_file.setFont(QFont("Arial", 14))  # Tăng font size
-        self.choose_restore_file.clicked.connect(self.select_restore_file)
-        group_layout.addWidget(self.choose_restore_file, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
-
-    # Nhãn mật khẩu
-        self.restore_password_label = QLabel("Mật khẩu:")
-        self.restore_password_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.restore_password_label.setFont(QFont("Arial", 14))  # Tăng font size
-        group_layout.addWidget(self.restore_password_label)
-
-    # Ô nhập mật khẩu
-        self.restore_password_input = QLineEdit()
-        self.restore_password_input.setEchoMode(QLineEdit.EchoMode.Password)
-        self.restore_password_input.setFixedWidth(350)  # Tăng chiều rộng ô nhập
-        self.restore_password_input.setFont(QFont("Arial", 14))  # Tăng font size
-        group_layout.addWidget(self.restore_password_input, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
-
-    # Layout cho các nút bấm
-        btn_layout = QHBoxLayout()
-        btn_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-
-    # Nút khôi phục
-        self.restore_button = QtWidgets.QPushButton(" Khôi phục")
-        self.restore_button.setIcon(QIcon("icons/restore.png"))
-        self.restore_button.setFont(QFont("Arial", 14))  # Tăng font size
-        self.restore_button.setFixedSize(250, 50)  # Tăng kích thước nút
-        self.restore_button.clicked.connect(self.restore_file)
-        btn_layout.addWidget(self.restore_button)
-
-    # Nút quay lại
-        self.back_button = QtWidgets.QPushButton(" Quay lại")
-        self.back_button.setIcon(QIcon("icons/back.png"))
-        self.back_button.setFont(QFont("Arial", 14))  # Tăng font size
-        self.back_button.setFixedSize(250, 50)  # Tăng kích thước nút
-        self.back_button.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
-        btn_layout.addWidget(self.back_button)
-
-    # Thêm nút vào layout
-        group_layout.addLayout(btn_layout)
-
-    # Nhãn kết quả
-        self.restore_result_label = QLabel("")
-        self.restore_result_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.restore_result_label.setFont(QFont("Arial", 14))  # Tăng font size
-        group_layout.addWidget(self.restore_result_label)
-
-    # Gắn layout vào groupbox
-        outer_group_layout.addStretch()
-        outer_group_layout.addWidget(inner_widget, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
-        outer_group_layout.addStretch()
-
-        self.restore_group.setLayout(outer_group_layout)
-
-    # Gắn groupbox vào layout trung tâm
-        central_layout.addWidget(self.restore_group)
-        outer_layout.addWidget(central_widget)    
-
-    def select_restore_file(self):
-        file_name, _ = QFileDialog.getOpenFileName(directory=self.temp_dir)
-        if file_name:
-            file_name = os.path.normpath(file_name)
-            self.restore_file_path = file_name
-            self.restore_file_label.setText(file_name)
-            if not os.path.exists(file_name):
-                self.restore_result_label.setText("File không tồn tại trong thư mục tạm!")
-            elif file_name not in self.passwords:
-                self.restore_result_label.setText("File không có trong danh sách khôi phục!")
-                print(f"Selected file: {file_name}")
-                print(f"Current passwords dict: {self.passwords}")
-            else:
-                self.restore_result_label.setText("")
-
-    def restore_file(self):
-        if not self.restore_file_path:
-            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn file để khôi phục!")
-            return
-
-        password = self.restore_password_input.text()
-        if not password:
-            QMessageBox.warning(self, "Lỗi", "Vui lòng nhập mật khẩu!")
-            return
-
-        if not os.path.exists(self.restore_file_path):
-            QMessageBox.warning(self, "Lỗi", "File không còn tồn tại trong thư mục tạm!")
-            return
-
-        stored_hash = self.passwords.get(self.restore_file_path)
-        if not stored_hash:
-            QMessageBox.warning(self, "Lỗi", "File không có trong danh sách khôi phục!")
-            print(f"Attempting to restore: {self.restore_file_path}")
-            print(f"Current passwords dict: {self.passwords}")
-            return
-
-        input_hash = hashlib.sha256(password.encode()).hexdigest()
-        if input_hash == stored_hash:
-            restore_path, _ = QFileDialog.getSaveFileName(self, "Chọn vị trí khôi phục",
-                                                          os.path.basename(self.restore_file_path))
-            if restore_path:
-                try:
-                    shutil.move(self.restore_file_path, restore_path)
-                    del self.passwords[self.restore_file_path]
-                    self.restore_file_label.setText("Hãy chọn file để khôi phục...")
-                    self.restore_password_input.clear()
-                    self.restore_file_path = None
-                    self.restore_result_label.setText("")
-                    QMessageBox.information(self, "Thành công", "File đã được khôi phục thành công!")
-                except Exception as e:
-                    QMessageBox.warning(self, "Lỗi", f"Không thể khôi phục file: {str(e)}")
-            else:
-                QMessageBox.warning(self, "Hủy bỏ", "Khôi phục file đã bị hủy.")
-        else:
-            self.restore_result_label.setText("Mật khẩu không đúng!")
 
 
 class CheckWidget(QtWidgets.QWidget):
@@ -579,12 +440,12 @@ class MainWindowDelFile(QtWidgets.QMainWindow):
 
         self.main_menu = MainMenuWidget(self.stacked_widget, self.main_screen)
         self.delete_widget = DeleteWidget(self.stacked_widget, self.passwords)
-        self.restore_widget = RestoreWidget(self.stacked_widget, self.passwords)  # Bỏ bình luận dòng này
+
         self.check_widget = CheckWidget(self.stacked_widget)
 
         self.stacked_widget.addWidget(self.main_menu)
         self.stacked_widget.addWidget(self.delete_widget)
-        self.stacked_widget.addWidget(self.restore_widget)  # Đảm bảo dòng này không bị lỗi
+
         self.stacked_widget.addWidget(self.check_widget)
 
         self.setStyleSheet("""
@@ -647,5 +508,3 @@ class MainWindowDelFile(QtWidgets.QMainWindow):
             color: #6272a4; /* Màu xanh tím */
         }
     """)
-
-

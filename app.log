@@ -315,3 +315,6 @@
 2025-04-16 13:20:40,206 - INFO - Feedback collected: {'size_mb': 4.863739013671875e-05, 'type': 0, 'sensitivity': 1, 'speed_priority': 1, 'chosen_algorithm': 'AES'}
 2025-04-16 13:20:40,214 - INFO - Feedback saved to e:\masterpythonpj\BTL-Python\Code\user_feedback.csv
 2025-04-16 13:20:40,455 - INFO - Model retrained successfully
+2025-04-16 13:41:57,170 - INFO - UI setup completed
+2025-04-16 13:41:57,170 - INFO - EncryptionApp initialized
+2025-04-16 13:41:59,900 - INFO - Back button clicked

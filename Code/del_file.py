@@ -10,11 +10,12 @@ from PyQt6.QtGui import QIcon
 
 
 class MainMenuWidget(QtWidgets.QWidget):
-    def __init__(self, stacked_widget, main_screen = None):
+    def __init__(self, stacked_widget, main_screen = None, MainWindowDelFile = None):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.main_screen = main_screen
         self.setupUi()
+        self.MainWindowDelFile = MainWindowDelFile
 
     def setupUi(self):
         layout = QtWidgets.QVBoxLayout()
@@ -24,10 +25,8 @@ class MainMenuWidget(QtWidgets.QWidget):
         title.setFont(QtGui.QFont("Arial", 24))  # Tăng kích thước font tiêu đề
         title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title)
-
     # Tạo khoảng cách giữa tiêu đề và các nút
         layout.addSpacing(20)
-
     # Căn chỉnh các nút với kích thước đồng đều
         button_style = """
             QPushButton {
@@ -46,13 +45,10 @@ class MainMenuWidget(QtWidgets.QWidget):
             background-color: #3b3f87;
             }
         """
-
         self.delete_btn = QtWidgets.QPushButton("Xóa File")
         self.delete_btn.setStyleSheet(button_style)
         self.delete_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
         layout.addWidget(self.delete_btn, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
-
-
         self.check_btn = QtWidgets.QPushButton("Kiểm tra File")
         self.check_btn.setStyleSheet(button_style)
         self.check_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
@@ -62,7 +58,6 @@ class MainMenuWidget(QtWidgets.QWidget):
         self.back_btn.setStyleSheet(button_style)
         self.back_btn.clicked.connect(self.go_back)
         layout.addWidget(self.back_btn, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
-
     # Thêm khoảng cách cuối cùng để căn giữa
         layout.addStretch()
         self.setLayout(layout)
@@ -71,6 +66,7 @@ class MainMenuWidget(QtWidgets.QWidget):
         if self.main_screen:
             self.main_screen.show()
         self.hide()
+        self.MainWindowDelFile.hide()
 
 class DeleteWidget(QtWidgets.QWidget):
     
@@ -215,7 +211,6 @@ class DeleteWidget(QtWidgets.QWidget):
             self.password_input.setVisible(False)
 
     def secure_overwrite(self, file_path, method="simple"):
-
         file_size = os.path.getsize(file_path)
         if method == "simple":
             with open(file_path, "rb+") as f:
@@ -270,9 +265,6 @@ class DeleteWidget(QtWidgets.QWidget):
             self.password_input.clear()
         except Exception as e:
             QMessageBox.warning(self, "Lỗi", f"Không thể xóa file: {str(e)}")
-
-
-
 
 class CheckWidget(QtWidgets.QWidget):
     def __init__(self, stacked_widget):
@@ -431,34 +423,25 @@ class MainWindowDelFile(QtWidgets.QMainWindow):
         super().__init__()
         self.setWindowTitle("Xóa File An Toàn")
         self.resize(1600, 800)
-
         self.stacked_widget = QStackedWidget()
         self.setCentralWidget(self.stacked_widget)
-
         self.passwords = {}
         self.main_screen = main_screen
-
-        self.main_menu = MainMenuWidget(self.stacked_widget, self.main_screen)
+        self.main_menu = MainMenuWidget(self.stacked_widget, self.main_screen, self)
         self.delete_widget = DeleteWidget(self.stacked_widget, self.passwords)
-
         self.check_widget = CheckWidget(self.stacked_widget)
-
         self.stacked_widget.addWidget(self.main_menu)
         self.stacked_widget.addWidget(self.delete_widget)
-
         self.stacked_widget.addWidget(self.check_widget)
-
         self.setStyleSheet("""
         QMainWindow {
             background-color: #1e1e2f; /* Màu nền chính */
         }
-    
         QLabel {
             color: white; /* Chữ trắng */
             font-size: 16px; /* Kích thước chữ */
             font-weight: bold; /* Chữ đậm */
         }
-    
         QPushButton {
             background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #5F4FFF, stop:1 #8871FF); /* Màu xanh tím */
             color: white; /* Chữ trắng */
@@ -466,17 +449,14 @@ class MainWindowDelFile(QtWidgets.QMainWindow):
             font-size: 14px;
             padding: 8px 16px;
         }
-    
         QPushButton:hover {
             background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #5F4FFF, stop:1 #8871FF); /* Đổi màu xanh tím nhạt hơn khi hover */
             color: white;
         }
-    
         QPushButton:pressed {
             background-color: #39416b; /* Đổi màu xanh tím đậm hơn khi nhấn */
             border: 1px solid #272b40;
         }
-    
         QGroupBox {
             border: 2px solid #39416b; /* Đường viền xanh tím đậm */
             border-radius: 5px;
@@ -484,12 +464,10 @@ class MainWindowDelFile(QtWidgets.QMainWindow):
             font-weight: bold;
             color: #6272a4; /* Màu xanh tím */
         }
-    
         QRadioButton {
             font-size: 14px;
             color: #6272a4; /* Màu xanh tím */
         }
-    
         QLineEdit {
             border: 1px solid #39416b; /* Viền xanh tím đậm */
             border-radius: 5px;
@@ -498,11 +476,9 @@ class MainWindowDelFile(QtWidgets.QMainWindow):
             color: white; /* Chữ trắng */
             background-color: #2d2f3f; /* Nền xanh tím tối */
         }
-    
         QLineEdit:focus {
             border: 2px solid #7080c4; /* Viền xanh tím nhạt khi focus */
         }
-    
         QMessageBox QLabel {
             font-size: 14px;
             color: #6272a4; /* Màu xanh tím */

@@ -74,4 +74,3 @@ def recommend_algorithm(size_mb, file_type, sensitivity, speed_priority):
     prediction = model.predict(input_data)[0]
     return algo_map[prediction]
 
-

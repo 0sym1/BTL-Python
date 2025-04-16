@@ -315,7 +315,7 @@ class EncryptionApp(QWidget):
             speed_priority = int(self.speed_combo.currentText().split('(')[1][0])
 
             suggested_algo = recommend_algorithm(size_mb, file_type, sensitivity, speed_priority)
-            #explanation = explain_recommendation(suggested_algo, size_mb, sensitivity, speed_priority)
+            # explanation = explain_recommendation(suggested_algo, size_mb, sensitivity, speed_priority)
 
             self.last_suggestion = {
                 'size_mb': size_mb,

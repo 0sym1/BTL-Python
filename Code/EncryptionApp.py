@@ -9,7 +9,7 @@ from Encrypt import Encryptor
 from Decrypt import Decryptor
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
-from AI.ai_suggest_v2 import recommend_algorithm, explain_recommendation, retrain_model
+from AI.ai_suggest_v2 import recommend_algorithm, retrain_model
 
 # Thiết lập logging
 logging.basicConfig(filename='app.log', level=logging.DEBUG,
@@ -334,7 +334,7 @@ class EncryptionApp(QWidget):
             speed_priority = int(self.speed_combo.currentText().split('(')[1][0])
 
             suggested_algo = recommend_algorithm(size_mb, file_type, sensitivity, speed_priority)
-            explanation = explain_recommendation(suggested_algo, size_mb, sensitivity, speed_priority)
+            # explanation = explain_recommendation(suggested_algo, size_mb, sensitivity, speed_priority)
 
             self.last_suggestion = {
                 'size_mb': size_mb,

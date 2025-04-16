@@ -83,7 +83,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.line.setGeometry(QtCore.QRect(0, 400, 1601, 20))
         self.line.setObjectName("line")
         self.notice1_label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.notice1_label.setGeometry(QtCore.QRect(720, 20, 271, 31))
+        self.notice1_label.setGeometry(QtCore.QRect(310, 20, 1181, 81))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.notice1_label.setFont(font)

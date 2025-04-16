@@ -74,11 +74,3 @@ def recommend_algorithm(size_mb, file_type, sensitivity, speed_priority):
     prediction = model.predict(input_data)[0]
     return algo_map[prediction]
 
-def explain_recommendation(pred, size, sens, speed):
-    if pred == "AES":
-        return "Vì file lớn, dữ liệu nhạy cảm, không yêu cầu tốc độ cao."
-    elif pred == "Blowfish":
-        return "Vì file nhỏ và bạn ưu tiên tốc độ xử lý."
-    else:
-        return "Vì đặc điểm dữ liệu trung tính, nên chọn thuật toán cân bằng như 3DES."
-

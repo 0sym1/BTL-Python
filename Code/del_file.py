@@ -52,10 +52,10 @@ class MainMenuWidget(QtWidgets.QWidget):
         self.delete_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
         layout.addWidget(self.delete_btn, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
 
-        self.restore_btn = QtWidgets.QPushButton("Khôi phục File")
-        self.restore_btn.setStyleSheet(button_style)
-        self.restore_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
-        layout.addWidget(self.restore_btn, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
+        # self.restore_btn = QtWidgets.QPushButton("Khôi phục File")
+        # self.restore_btn.setStyleSheet(button_style)
+        # self.restore_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
+        # layout.addWidget(self.restore_btn, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.check_btn = QtWidgets.QPushButton("Kiểm tra File")
         self.check_btn.setStyleSheet(button_style)
@@ -131,10 +131,10 @@ class DeleteWidget(QtWidgets.QWidget):
         group_layout.addWidget(self.delete_perm_radio, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
 
     # Radio xóa có khôi phục
-        self.delete_rec_radio = QtWidgets.QRadioButton("Xóa có khôi phục")
-        self.delete_rec_radio.setFont(QtGui.QFont("Arial", 14))  # Tăng font size
-        self.delete_rec_radio.toggled.connect(self.toggle_fields)
-        group_layout.addWidget(self.delete_rec_radio, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
+        # self.delete_rec_radio = QtWidgets.QRadioButton("Xóa có khôi phục")
+        # self.delete_rec_radio.setFont(QtGui.QFont("Arial", 14))  # Tăng font size
+        # self.delete_rec_radio.toggled.connect(self.toggle_fields)
+        # group_layout.addWidget(self.delete_rec_radio, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
 
     # Thuật toán
         self.algorithm_label = QtWidgets.QLabel("Thuật toán:")
@@ -205,17 +205,28 @@ class DeleteWidget(QtWidgets.QWidget):
             self.file_path = file_name
             self.file_label.setText(file_name)
 
+    # def toggle_fields(self):
+    #     if self.delete_perm_radio.isChecked():
+    #         self.algorithm_label.setVisible(True)
+    #         self.algorithm_combo.setVisible(True)
+    #         self.password_label.setVisible(False)
+    #         self.password_input.setVisible(False)
+    #     elif self.delete_rec_radio.isChecked():
+    #         self.algorithm_label.setVisible(False)
+    #         self.algorithm_combo.setVisible(False)
+    #         self.password_label.setVisible(True)
+    #         self.password_input.setVisible(True)
+    #     else:
+    #         self.algorithm_label.setVisible(False)
+    #         self.algorithm_combo.setVisible(False)
+    #         self.password_label.setVisible(False)
+    #         self.password_input.setVisible(False)
     def toggle_fields(self):
         if self.delete_perm_radio.isChecked():
             self.algorithm_label.setVisible(True)
             self.algorithm_combo.setVisible(True)
             self.password_label.setVisible(False)
             self.password_input.setVisible(False)
-        elif self.delete_rec_radio.isChecked():
-            self.algorithm_label.setVisible(False)
-            self.algorithm_combo.setVisible(False)
-            self.password_label.setVisible(True)
-            self.password_input.setVisible(True)
         else:
             self.algorithm_label.setVisible(False)
             self.algorithm_combo.setVisible(False)
@@ -253,13 +264,57 @@ class DeleteWidget(QtWidgets.QWidget):
                     data = pattern()[:file_size]
                     f.write(data)
 
+    # def delete_file(self):
+    #     if not self.file_path:
+    #         QMessageBox.warning(self, "Lỗi", "Vui lòng chọn file để xóa!")
+    #         return
+
+    #     if not (self.delete_perm_radio.isChecked() or self.delete_rec_radio.isChecked()):
+    #         QMessageBox.warning(self, "Lỗi", "Vui lòng chọn một tùy chọn xóa!")
+    #         return
+
+    #     try:
+    #         if self.delete_perm_radio.isChecked():
+    #             algorithm = self.algorithm_combo.currentText().lower()
+    #             if algorithm == "dod 5220.22-m":
+    #                 algorithm = "dod"
+    #             self.secure_overwrite(self.file_path, algorithm)
+    #             os.remove(self.file_path)
+    #             QMessageBox.information(self, "Thành công",
+    #                                     f"File đã được xóa vĩnh viễn bằng {self.algorithm_combo.currentText()}!")
+    #         elif self.delete_rec_radio.isChecked():
+    #             password = self.password_input.text()
+    #             if not password:
+    #                 QMessageBox.warning(self, "Lỗi", "Vui lòng nhập mật khẩu để xóa có khôi phục!")
+    #                 return
+
+    #             if not os.path.exists(self.temp_dir):
+    #                 os.makedirs(self.temp_dir)
+
+    #             file_name = os.path.basename(self.file_path)
+    #             temp_path = os.path.join(self.temp_dir, file_name)
+    #             # Chuẩn hóa đường dẫn để tránh lỗi do dấu phân cách
+    #             temp_path = os.path.normpath(temp_path)
+    #             shutil.move(self.file_path, temp_path)
+    #             self.passwords[temp_path] = hashlib.sha256(password.encode()).hexdigest()
+    #             # In thông tin debug
+    #             print(f"Added to passwords: {temp_path} -> {self.passwords[temp_path]}")
+    #             print(f"Current passwords dict: {self.passwords}")
+    #             QMessageBox.information(self, "Thành công", "File đã được xóa có khôi phục!\n"
+    #                                                         "Lưu ý: File đang ở thư mục tạm và cần mật khẩu để khôi phục.")
+
+    #         self.file_label.setText("Hãy chọn file của bạn...")
+    #         self.file_path = None
+    #         self.password_input.clear()
+    #     except Exception as e:
+    #         QMessageBox.warning(self, "Lỗi", f"Không thể xóa file: {str(e)}")
     def delete_file(self):
         if not self.file_path:
             QMessageBox.warning(self, "Lỗi", "Vui lòng chọn file để xóa!")
             return
 
-        if not (self.delete_perm_radio.isChecked() or self.delete_rec_radio.isChecked()):
-            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn một tùy chọn xóa!")
+        if not self.delete_perm_radio.isChecked():
+            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn tùy chọn xóa vĩnh viễn!")
             return
 
         try:
@@ -271,26 +326,6 @@ class DeleteWidget(QtWidgets.QWidget):
                 os.remove(self.file_path)
                 QMessageBox.information(self, "Thành công",
                                         f"File đã được xóa vĩnh viễn bằng {self.algorithm_combo.currentText()}!")
-            elif self.delete_rec_radio.isChecked():
-                password = self.password_input.text()
-                if not password:
-                    QMessageBox.warning(self, "Lỗi", "Vui lòng nhập mật khẩu để xóa có khôi phục!")
-                    return
-
-                if not os.path.exists(self.temp_dir):
-                    os.makedirs(self.temp_dir)
-
-                file_name = os.path.basename(self.file_path)
-                temp_path = os.path.join(self.temp_dir, file_name)
-                # Chuẩn hóa đường dẫn để tránh lỗi do dấu phân cách
-                temp_path = os.path.normpath(temp_path)
-                shutil.move(self.file_path, temp_path)
-                self.passwords[temp_path] = hashlib.sha256(password.encode()).hexdigest()
-                # In thông tin debug
-                print(f"Added to passwords: {temp_path} -> {self.passwords[temp_path]}")
-                print(f"Current passwords dict: {self.passwords}")
-                QMessageBox.information(self, "Thành công", "File đã được xóa có khôi phục!\n"
-                                                            "Lưu ý: File đang ở thư mục tạm và cần mật khẩu để khôi phục.")
 
             self.file_label.setText("Hãy chọn file của bạn...")
             self.file_path = None

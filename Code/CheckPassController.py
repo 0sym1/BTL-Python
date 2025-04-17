@@ -76,15 +76,23 @@ class CheckPassController(CheckPassScene.Ui_MainWindow):
             self.authentication_step = 2
 
             global otp
-            otp = TwoFactorAuth.generate_otp()
-            # TwoFactorAuth.send_otp(email, otp)
-            otp = "123"
+
+            if(email == ''):
+                self.label.setText('if this is first time, OTP: 123')
+                otp = "123"
+                
+            else:
+                otp = TwoFactorAuth.generate_otp()
+                TwoFactorAuth.send_otp(email, otp)
+                # otp = "123"
             
 
         else:
             self.label.setText('Incorrect Password')
 
     def check_otp(self, input):
+        print("OTP: ", otp)
+        print("Input: ", input)
         if(input == otp):
             self.close()
             self.login_successful.emit()

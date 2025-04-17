@@ -34,13 +34,14 @@ class ChangeEmailController(ChangeEmailScene.Ui_MainWindow):
             lines = files.readlines()
             current_email = lines[1].strip().split(":")[1].strip()
 
-        if(self.current_mai_line.text() != current_email):
+        if(self.current_mai_line.text() != current_email and current_email != ""):
             self.notice_label.setText("Current email is incorrect")
             return
-
-        if(self.new_mail_line.text() == "" or self.cf_new_mail_line.text() == "" or self.current_mai_line.text() == ""):
-            self.notice_label.setText("Please fill in all the fields")
-            return
+        
+        if(current_email != ""):
+            if(self.new_mail_line.text() == "" or self.cf_new_mail_line.text() == "" or self.current_mai_line.text() == ""):
+                self.notice_label.setText("Please fill in all the fields")
+                return
         
         if(self.new_mail_line.text() != self.cf_new_mail_line.text()):
             self.notice_label.setText("New email does not match")

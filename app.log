@@ -257,3 +257,47 @@
 2025-04-16 20:29:04,109 - INFO - UI setup completed
 2025-04-16 20:29:04,109 - INFO - EncryptionApp initialized
 2025-04-16 20:29:07,527 - INFO - Back button clicked
+2025-04-16 21:04:35,596 - INFO - UI setup completed
+2025-04-16 21:04:35,597 - INFO - EncryptionApp initialized
+2025-04-16 21:05:13,256 - INFO - Text encrypted successfully
+2025-04-16 21:05:25,810 - INFO - Text decrypted successfully
+2025-04-16 21:05:45,082 - INFO - Text encrypted successfully
+2025-04-16 21:05:53,708 - INFO - File decryption cancelled: No file selected
+2025-04-16 21:05:54,531 - INFO - Text decrypted successfully
+2025-04-16 21:06:03,712 - WARNING - Suggest algorithm attempted without file selection
+2025-04-16 21:06:39,344 - WARNING - Suggest algorithm attempted without file selection
+2025-04-16 21:12:13,354 - INFO - UI setup completed
+2025-04-16 21:12:13,354 - INFO - EncryptionApp initialized
+2025-04-16 21:12:43,872 - INFO - Text encrypted successfully
+2025-04-16 21:12:50,177 - INFO - Text decrypted successfully
+2025-04-16 21:13:05,922 - INFO - File selected for suggestion: E:/Em iu PTIT/Bai Tap PTIT/Python/BTL/test.txt
+2025-04-16 21:13:36,092 - INFO - Algorithm suggested: 3DES
+2025-04-16 21:13:56,243 - INFO - File encryption cancelled: No file selected
+2025-04-16 21:13:59,810 - INFO - File encryption cancelled: No file selected
+2025-04-16 21:14:24,537 - INFO - File encrypted: E:/Em iu PTIT/Bai Tap PTIT/Python/BTL/test.txt -> E:/Em iu PTIT/Bai Tap PTIT/Python/BTL/test_mahoa.txt.enc
+2025-04-16 21:16:24,448 - INFO - File encryption cancelled: No file selected
+2025-04-16 21:16:27,929 - INFO - File encryption cancelled: No file selected
+2025-04-16 21:16:36,013 - INFO - File encryption cancelled: No file selected
+2025-04-16 21:16:38,700 - INFO - File encryption cancelled: No file selected
+2025-04-16 21:17:04,476 - INFO - File encrypted: E:/Em iu PTIT/Bai Tap PTIT/Python/BTL/test.txt -> E:/Em iu PTIT/Bai Tap PTIT/Python/BTL/testttttt.txt.enc
+2025-04-16 21:23:35,119 - INFO - UI setup completed
+2025-04-16 21:23:35,119 - INFO - EncryptionApp initialized
+2025-04-16 21:24:10,423 - INFO - Text encrypted successfully
+2025-04-16 21:24:24,363 - INFO - File decryption cancelled: No file selected
+2025-04-16 21:24:25,070 - INFO - Text decrypted successfully
+2025-04-16 21:24:44,518 - INFO - File selected for suggestion: E:/Em iu PTIT/Bai Tap PTIT/Python/BTL/test.txt
+2025-04-16 21:25:56,783 - INFO - Back button clicked
+2025-04-16 21:26:00,432 - INFO - UI setup completed
+2025-04-16 21:26:00,432 - INFO - EncryptionApp initialized
+2025-04-16 21:26:32,872 - INFO - Text encrypted successfully
+2025-04-16 21:26:42,827 - INFO - Text decrypted successfully
+2025-04-16 21:27:04,027 - INFO - File selected for suggestion: E:/Em iu PTIT/Bai Tap PTIT/Python/BTL/test.txt
+2025-04-16 21:27:28,896 - INFO - Algorithm suggested: 3DES
+2025-04-16 21:27:50,069 - INFO - File encrypted: E:/Em iu PTIT/Bai Tap PTIT/Python/BTL/test.txt -> E:/Em iu PTIT/Bai Tap PTIT/Python/BTL/test_mahoa.txt.enc
+2025-04-16 21:30:18,274 - INFO - Algorithm suggested: 3DES
+2025-04-16 21:30:20,914 - INFO - collect_feedback started
+2025-04-16 21:30:20,928 - INFO - Feedback dialog created
+2025-04-16 21:30:30,638 - INFO - Feedback collected: {'size_mb': 4.863739013671875e-05, 'type': 0, 'sensitivity': 1, 'speed_priority': 1, 'chosen_algorithm': 'AES'}
+2025-04-16 21:30:30,659 - INFO - Feedback saved to e:\Em iu PTIT\Bai Tap PTIT\Python\BTL\Code\user_feedback.csv
+2025-04-16 21:30:30,982 - INFO - Model retrained successfully
+2025-04-16 21:30:38,206 - INFO - Back button clicked

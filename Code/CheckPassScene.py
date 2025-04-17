@@ -13,7 +13,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
+        
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(300, 400)
@@ -29,9 +29,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.lineEdit.setGeometry(QtCore.QRect(60, 130, 181, 31))
         self.lineEdit.setObjectName("lineEdit")
         self.label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(30, 70, 241, 41))
+        self.label.setGeometry(QtCore.QRect(20, 70, 261, 41))
         font = QtGui.QFont()
-        font.setPointSize(13)
+        font.setPointSize(12)
         self.label.setFont(font)
         self.label.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
         self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -52,7 +52,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Continue"))
-        self.label.setText(_translate("MainWindow", "Your Password"))
+        self.label.setText(_translate("MainWindow", "Your Password (default: 123)"))
 
 
 if __name__ == "__main__":

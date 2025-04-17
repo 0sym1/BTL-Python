@@ -36,3 +36,22 @@ def send_otp(email, otp):
     except Exception as e:
         print(f"Lỗi khi gửi email: {e}")
 
+def send_cf(email, otp):
+    msg = MIMEMultipart()
+    msg["From"] = EMAIL_SENDER
+    msg["To"] = email
+    msg["Subject"] = "Mã xác thực OTP của bạn"
+
+    body = f"Mã OTP của bạn là: {otp}. Mã này có hiệu lực trong 5 phút."
+    msg.attach(MIMEText(body, "plain"))
+
+    try:
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+        server.sendmail(EMAIL_SENDER, email, msg.as_string())
+        server.quit()
+        print("OTP đã được gửi thành công!")
+    except Exception as e:
+        print(f"Lỗi khi gửi email: {e}")
+

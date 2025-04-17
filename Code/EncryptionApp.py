@@ -26,7 +26,6 @@ class EncryptionApp(QWidget):
 
     def initUI(self):
         main_layout = QVBoxLayout()
-
         header_layout = QHBoxLayout()
         self.btn_back = QPushButton("Quay lại")
         self.btn_back.clicked.connect(self.go_back)
@@ -51,42 +50,34 @@ class EncryptionApp(QWidget):
             }
         """)
         header_layout.addWidget(self.btn_back)
-
         title_label = QLabel("Ứng dụng Mã hóa và Giải mã")
         title_label.setStyleSheet("font-size: 24px; font-weight: bold; color: #ffffff; margin: 10px;")
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         header_layout.addWidget(title_label)
         header_layout.addStretch()
         main_layout.addLayout(header_layout)
-
         content_layout = QHBoxLayout()
         content_layout.setSpacing(20)
-
         left_layout = QVBoxLayout()
         left_layout.setSpacing(15)
-
         algo_layout = QHBoxLayout()
         self.label = QLabel("Chọn thuật toán:")
         self.label.setStyleSheet("font-size: 16px; color: #ffffff; font-weight: bold;")
         algo_layout.addWidget(self.label)
-
         self.combo = QComboBox()
         self.combo.addItems(["AES", "3DES", "Blowfish"])
         self.combo.setStyleSheet("padding: 5px; font-size: 16px; color: #ffffff; background-color: #333; border: 1px solid #555; border-radius: 5px; font-weight: bold;")
         algo_layout.addWidget(self.combo)
         left_layout.addLayout(algo_layout)
-
         file_layout = QHBoxLayout()
         file_label = QLabel("Chọn file:")
         file_label.setStyleSheet("font-size: 16px; color: #ffffff; font-weight: bold;")
         file_layout.addWidget(file_label)
-
         self.file_input = QLineEdit()
         self.file_input.setPlaceholderText("Chọn file để gợi ý thuật toán")
         self.file_input.setReadOnly(True)
         self.file_input.setStyleSheet("padding: 5px; font-size: 16px; border: 1px solid #555; border-radius: 5px;")
         file_layout.addWidget(self.file_input)
-
         self.btn_select_file = QPushButton("Chọn")
         self.btn_select_file.clicked.connect(self.select_file_for_suggestion)
         self.btn_select_file.setStyleSheet("""
@@ -103,29 +94,24 @@ class EncryptionApp(QWidget):
         """)
         file_layout.addWidget(self.btn_select_file)
         left_layout.addLayout(file_layout)
-
         sensitivity_layout = QHBoxLayout()
         sensitivity_label = QLabel("Độ nhạy cảm:")
         sensitivity_label.setStyleSheet("font-size: 16px; color: #ffffff; font-weight: bold;")
         sensitivity_layout.addWidget(sensitivity_label)
-
         self.sensitivity_combo = QComboBox()
         self.sensitivity_combo.addItems(["Thấp (0)", "Trung bình (1)", "Cao (2)"])
         self.sensitivity_combo.setStyleSheet("padding: 5px; font-size: 16px; color: #ffffff; background-color: #333; border: 1px solid #555; border-radius: 5px; font-weight: bold;")
         sensitivity_layout.addWidget(self.sensitivity_combo)
         left_layout.addLayout(sensitivity_layout)
-
         speed_layout = QHBoxLayout()
         speed_label = QLabel("Ưu tiên tốc độ:")
         speed_label.setStyleSheet("font-size: 16px; color: #ffffff; font-weight: bold;")
         speed_layout.addWidget(speed_label)
-
         self.speed_combo = QComboBox()
         self.speed_combo.addItems(["Không (0)", "Có (1)"])
         self.speed_combo.setStyleSheet("padding: 5px; font-size: 16px; color: #ffffff; background-color: #333; border: 1px solid #555; border-radius: 5px; font-weight: bold;")
         speed_layout.addWidget(self.speed_combo)
         left_layout.addLayout(speed_layout)
-
         self.btn_suggest = QPushButton("Gợi ý thuật toán")
         self.btn_suggest.clicked.connect(self.suggest_algorithm)
         self.btn_suggest.setIcon(QIcon("icons/suggest.png"))
@@ -252,20 +238,15 @@ class EncryptionApp(QWidget):
             font-weight: bold;
         """)
         right_layout.addWidget(self.btn_decrypt_file)
-
         content_layout.addLayout(right_layout)
-
         main_layout.addLayout(content_layout)
-
         result_label = QLabel("Kết quả:")
         result_label.setStyleSheet("font-size: 16px; color: #ffffff; margin-top: 10px;font-weight: bold;")
         main_layout.addWidget(result_label)
-
         self.result = QTextEdit()
         self.result.setReadOnly(True)
         self.result.setStyleSheet("padding: 5px; font-size: 16px; border: 1px solid #555; border-radius: 5px; background-color: #333; color: #fff;")
         main_layout.addWidget(self.result)
-
         self.setLayout(main_layout)
         self.setWindowTitle("Ứng dụng Mã hóa và Giải mã")
         self.resize(1600, 800)

@@ -433,7 +433,6 @@ class MainWindowDelFile(QtWidgets.QMainWindow):
         self.stacked_widget.addWidget(self.main_menu)
         self.stacked_widget.addWidget(self.delete_widget)
         self.stacked_widget.addWidget(self.check_widget)
-
         self.setStyleSheet("""
         QMainWindow {
             background-color: #1e1e2f; /* Màu nền chính */

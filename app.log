@@ -301,3 +301,10 @@
 2025-04-16 21:30:30,659 - INFO - Feedback saved to e:\Em iu PTIT\Bai Tap PTIT\Python\BTL\Code\user_feedback.csv
 2025-04-16 21:30:30,982 - INFO - Model retrained successfully
 2025-04-16 21:30:38,206 - INFO - Back button clicked
+2025-04-17 14:26:59,914 - INFO - UI setup completed
+2025-04-17 14:26:59,914 - INFO - EncryptionApp initialized
+2025-04-17 14:27:08,186 - INFO - File selected for suggestion: E:/Em iu PTIT/Bai Tap PTIT/Python/BTL/app.log
+2025-04-17 14:27:13,530 - INFO - collect_feedback started
+2025-04-17 14:27:15,451 - WARNING - Feedback attempted without prior suggestion
+2025-04-17 14:27:16,220 - INFO - File type determined: .log -> 0 (Text)
+2025-04-17 14:27:20,225 - INFO - Algorithm suggested: AES

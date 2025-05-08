@@ -62,14 +62,16 @@ def retrain_model():
     print(f"✅ Mô hình huấn luyện xong. Độ chính xác: {acc * 100:.2f}%\n")
     return model
 
-# Kiểm tra hoặc huấn luyện lại mô hình
-if not os.path.exists(MODEL_FILE):
-    model = retrain_model()
-else:
-    model = joblib.load(MODEL_FILE)
-    print(f"📦 Đã tải mô hình từ {MODEL_FILE}")
+
+
 
 def recommend_algorithm(size_mb, file_type, sensitivity, speed_priority):
+    # Kiểm tra hoặc huấn luyện lại mô hình
+    if not os.path.exists(MODEL_FILE):
+        model = retrain_model()
+    else:
+        model = joblib.load(MODEL_FILE)
+    print(f"📦 Đã tải mô hình từ {MODEL_FILE}")
     input_data = np.array([[size_mb, file_type, sensitivity, speed_priority]])
     prediction = model.predict(input_data)[0]
     return algo_map[prediction]

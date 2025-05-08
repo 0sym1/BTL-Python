@@ -83,8 +83,8 @@ class CheckPassController(CheckPassScene.Ui_MainWindow):
                 
             else:
                 otp = TwoFactorAuth.generate_otp()
-                TwoFactorAuth.send_otp(email, otp)
-                # otp = "123"
+                # TwoFactorAuth.send_otp(email, otp)
+                otp = "123"
             
 
         else:
